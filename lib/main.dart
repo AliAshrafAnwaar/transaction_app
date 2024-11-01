@@ -19,7 +19,7 @@ class Application extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("اختيار الخدمه"),
+        title: const Text("تسجيل عمليه السحب"),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
