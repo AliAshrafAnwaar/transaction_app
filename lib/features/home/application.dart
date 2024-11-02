@@ -37,6 +37,7 @@ class _ApplicationState extends State<Application> {
   void onSubmit() {
     if (_formKey.currentState!.validate()) {
       // Validate the form
+
       // Retrieve the text from the controllers
       String name = nameController.text;
       String phoneNumber = phoneController.text;
