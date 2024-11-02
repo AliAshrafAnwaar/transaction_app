@@ -1,16 +1,16 @@
 import 'package:transaction_app/data/model/transaction.dart';
 
 class Client {
-  List<Transaction> transactions;
-  final String phoneNumber;
-  final String name;
-  int numberTransactions;
+  List<Transaction>? transactions;
+  final String? phoneNumber;
+  final String? name;
+  int? numberTransactions;
 
   Client(
-      {required this.name,
-      required this.phoneNumber,
-      required this.transactions,
-      required this.numberTransactions});
+      {this.name,
+      this.phoneNumber,
+      this.transactions,
+      this.numberTransactions});
 
   void fromFirestore(Map<String, dynamic> json) {
     Client(
@@ -34,8 +34,8 @@ class Client {
     for (var c in clients) {
       print('${client.phoneNumber} + ${c.phoneNumber}');
       if (client.phoneNumber == c.phoneNumber) {
-        c.transactions.add(client.transactions[0]);
-        print(1);
+        c.transactions!.add(client.transactions![0]);
+        allTransactions.add(client.transactions![0]);
         return;
       }
     }

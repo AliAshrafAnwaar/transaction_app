@@ -37,9 +37,9 @@ class _ClientTransactionsState extends State<ClientTransactions> {
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: ListView.builder(
-              itemCount: widget.client.transactions.length,
+              itemCount: widget.client.transactions!.length,
               itemBuilder: (context, index) {
-                Transaction transaction = widget.client.transactions[index];
+                Transaction transaction = widget.client.transactions![index];
                 return Container(
                     decoration: BoxDecoration(
                         color: AppColors.secondaryText.withOpacity(0.05),
