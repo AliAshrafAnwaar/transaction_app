@@ -8,6 +8,7 @@ class StyledTextField extends StatefulWidget {
       this.isPassword,
       this.controller,
       this.password,
+      this.options,
       super.key});
 
   final String hint;
@@ -15,6 +16,7 @@ class StyledTextField extends StatefulWidget {
   final bool? isPassword;
   final TextEditingController? controller;
   final TextEditingController? password;
+  final List<String>? options; // List of options for selection
 
   @override
   State<StyledTextField> createState() => _StyledTextFieldState();
@@ -32,15 +34,46 @@ class _StyledTextFieldState extends State<StyledTextField> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
     isPasswordChecker =
         isPasswordChecker ?? (widget.isPassword == true ? true : false);
+  }
 
+  // Function to show options dialog
+  void _showOptionsDialog() {
+    if (widget.options != null && widget.options!.isNotEmpty) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return SimpleDialog(
+            title: Text('اختر ${widget.hint}'),
+            children: widget.options!.map((option) {
+              return SimpleDialogOption(
+                onPressed: () {
+                  setState(() {
+                    widget.controller?.text = option;
+                  });
+                  Navigator.pop(context);
+                },
+                child: Text(option),
+              );
+            }).toList(),
+          );
+        },
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: TextFormField(
         style: Theme.of(context).textTheme.bodyMedium,
         controller: widget.controller,
+        readOnly:
+            widget.options != null, // Make it read-only if options are provided
         validator: (value) {
           if (value == null || value.isEmpty) {
             return 'Please enter ${widget.hint}';
@@ -59,27 +92,17 @@ class _StyledTextFieldState extends State<StyledTextField> {
         },
         obscureText: isPasswordChecker!,
         decoration: InputDecoration(
-          //Hint text
           hintText: widget.hint,
-
-          //apply padding
           contentPadding:
               const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
-
-          //text coloring
           labelStyle: Theme.of(context).textTheme.headlineMedium,
           hintStyle: Theme.of(context).textTheme.bodySmall,
           errorStyle: Theme.of(context).textTheme.bodyLarge,
-
-          // left side Icon
           prefixIcon: Icon(
             widget.icon,
             color: AppColors.hintColor,
             size: 20,
           ),
-
-          //enable border
-
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: const BorderSide(
@@ -115,7 +138,6 @@ class _StyledTextFieldState extends State<StyledTextField> {
               width: 1,
             ),
           ),
-          //password right side Icon
           suffixIcon: widget.isPassword == true
               ? IconButton(
                   icon: Icon(
@@ -132,6 +154,9 @@ class _StyledTextFieldState extends State<StyledTextField> {
                   })
               : const SizedBox(),
         ),
+        onTap: widget.options != null
+            ? _showOptionsDialog
+            : null, // Show dialog on tap
       ),
     );
   }

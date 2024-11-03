@@ -28,21 +28,4 @@ class Transaction {
       'phoneNumber': phoneNumber,
     };
   }
-
-  // Adding transactions to global list and client-specific lists
-  void addTransaction(Transaction transaction) {
-    // Add to the global list
-    // allTransactions.add(transaction);
-
-    // You can also add this transaction to the respective client's transaction list
-    // Here’s a hypothetical way to do that
-    // for (var client in clients) {
-    //   if (client.phoneNumber == transaction.phoneNumber) {
-    //     client.transactions.add(transaction);
-    //     client.numberTransactions =
-    //         client.transactions.length; // Update transaction count
-    //     break;
-    //   }
-    // }
-  }
 }

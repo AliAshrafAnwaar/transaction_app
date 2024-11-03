@@ -53,7 +53,7 @@ class _DisplayState extends State<Display> {
             padding: const EdgeInsets.all(8.0),
             child: TextField(
               controller: searchController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'ابحث عن عميل',
                 border: OutlineInputBorder(),
               ),

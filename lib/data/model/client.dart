@@ -12,6 +12,7 @@ class Client {
       this.transactions,
       this.numberTransactions});
 
+  // formate from Firebase
   void fromFirestore(Map<String, dynamic> json) {
     Client(
         name: json['name'],
@@ -20,6 +21,7 @@ class Client {
         transactions: json['transactions']);
   }
 
+  // formate to fireBase
   Map<String, dynamic> toFirestore() {
     return {
       'name': name,
@@ -29,6 +31,7 @@ class Client {
     };
   }
 
+  // Add to Alltransactions and to Client
   void addClient(Client client) {
     print(client.phoneNumber);
     for (var c in clients) {
@@ -41,6 +44,36 @@ class Client {
     }
     clients.add(client);
     print(2);
+    return;
+  }
+
+  // Delete Client From Client list
+  void deleteClient(Client client) {
+    for (var c in clients) {
+      if (client.phoneNumber == c.phoneNumber) {
+        clients.remove(c);
+        print('Client deleted');
+        return;
+      }
+    }
+    print('Client not found');
+    return;
+  }
+
+  // Delete transaction from transaction list of User
+  void deleteTransaction(Client client, Transaction transaction) {
+    client.transactions!.remove(transaction);
+  }
+
+  void editClient(Client newClient, Client oldClient) {
+    for (var c in clients) {
+      if (oldClient.phoneNumber == c.phoneNumber) {
+        clients.remove(c);
+        clients.add(newClient);
+        return;
+      }
+    }
+    print('Client not found');
     return;
   }
 }

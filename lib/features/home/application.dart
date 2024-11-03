@@ -73,6 +73,8 @@ class _ApplicationState extends State<Application> {
     }
   }
 
+  String selectedType = 'ايداع';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -106,6 +108,7 @@ class _ApplicationState extends State<Application> {
                 hint: "نوع العمليه",
                 icon: Icons.type_specimen,
                 controller: typeController,
+                options: ["ايداع", "سحب"],
               ),
               StyledTextField(
                 hint: "تاريخ العمليه",
