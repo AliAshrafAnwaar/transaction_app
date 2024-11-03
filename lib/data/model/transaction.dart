@@ -1,5 +1,3 @@
-import 'package:transaction_app/data/model/client.dart';
-
 class Transaction {
   final String phoneNumber;
   late final String id;
