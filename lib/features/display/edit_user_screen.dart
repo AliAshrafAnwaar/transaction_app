@@ -43,7 +43,13 @@ class _EditUserScreenState extends State<EditUserScreen> {
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
       // If the form is valid, proceed with the update
-      // You can add your logic here to update the user data
+      Client client = Client(
+          name: _nameController.text,
+          phoneNumber: _phoneNumberController.text,
+          transactions: widget.client.transactions,
+          numberTransactions: widget.client.numberTransactions);
+      print("new: ${client.name} old: ${widget.client.name}");
+      widget.client.editClient(client, widget.client);
       print("Form is valid. Proceed with updating user data.");
     } else {
       // If the form is invalid, show an error
@@ -71,11 +77,11 @@ class _EditUserScreenState extends State<EditUserScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const SizedBox(
-                      width: 100,
+                      width: 70,
                       child: Text("الاسم"),
                     ),
                     SizedBox(
-                      width: 300,
+                      width: 250,
                       child: StyledTextField(
                         controller: _nameController,
                         hint: "الاسم",
@@ -89,11 +95,11 @@ class _EditUserScreenState extends State<EditUserScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const SizedBox(
-                      width: 100,
+                      width: 70,
                       child: Text("رقم الهاتف"),
                     ),
                     SizedBox(
-                      width: 300,
+                      width: 250,
                       child: StyledTextField(
                         controller: _phoneNumberController,
                         hint: "رقم الهاتف",

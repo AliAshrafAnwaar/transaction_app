@@ -65,6 +65,7 @@ class Client {
     client.transactions!.remove(transaction);
   }
 
+  // Edite Client info
   void editClient(Client newClient, Client oldClient) {
     for (var c in clients) {
       if (oldClient.phoneNumber == c.phoneNumber) {
