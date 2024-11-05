@@ -77,6 +77,20 @@ class Client {
     print('Client not found');
     return;
   }
+
+  void editTransaction(
+      Client client, Transaction newTransaction, Transaction oldTransaction) {
+    for (Client c in clients) {
+      if (c == client) {
+        for (Transaction transaction in client.transactions!) {
+          if (transaction == oldTransaction) {
+            client.transactions!.remove(oldTransaction);
+            client.transactions!.add(newTransaction);
+          }
+        }
+      }
+    }
+  }
 }
 
 List<Client> clients = [

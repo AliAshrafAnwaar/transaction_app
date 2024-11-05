@@ -3,6 +3,7 @@ import 'package:transaction_app/core/app_colors.dart';
 import 'package:transaction_app/data/model/client.dart';
 import 'package:transaction_app/data/model/transaction.dart';
 import 'package:transaction_app/features/display/edit_user_screen.dart';
+import 'package:transaction_app/features/display/edit_user_transaction_screen.dart';
 import 'package:transaction_app/features/shared/styled_button.dart';
 
 class ClientTransactions extends StatefulWidget {
@@ -44,13 +45,13 @@ class _ClientTransactionsState extends State<ClientTransactions> {
               },
               itemBuilder: (BuildContext context) {
                 return [
-                  PopupMenuItem<String>(
+                  const PopupMenuItem<String>(
                     value: 'Edit User',
                     child: Text('تعديل بينات العميل'),
                   ),
                 ];
               },
-              icon: Icon(Icons.more_vert), // Three dots icon
+              icon: const Icon(Icons.more_vert), // Three dots icon
             ),
           ),
         ],
@@ -62,37 +63,48 @@ class _ClientTransactionsState extends State<ClientTransactions> {
           itemCount: widget.client.transactions!.length,
           itemBuilder: (context, index) {
             Transaction transaction = widget.client.transactions![index];
-            return Container(
-              decoration: BoxDecoration(
-                  color: AppColors.secondaryText.withOpacity(0.05),
-                  borderRadius: const BorderRadius.all(Radius.circular(5))),
-              padding: const EdgeInsets.all(8),
-              margin: const EdgeInsets.symmetric(vertical: 8),
-              child: Row(
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('مبلغ العمليه: ${transaction.amount}'),
-                      Text('طريقه الدفع: ${transaction.payMethod}'),
-                      Text('نوع العمليه: ${transaction.type}'),
-                    ],
-                  ),
-                  const Expanded(child: SizedBox()),
-                  Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: IconButton(
-                        onPressed: () {
-                          widget.client
-                              .deleteTransaction(widget.client, transaction);
-                        },
-                        icon: const Icon(
-                          Icons.delete,
-                          color: AppColors.myRed,
-                        )),
-                  ),
-                ],
+            return GestureDetector(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => EditUserTransactionScreen(
+                              client: widget.client,
+                              transaction: transaction,
+                            )));
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                    color: AppColors.secondaryText.withOpacity(0.05),
+                    borderRadius: const BorderRadius.all(Radius.circular(5))),
+                padding: const EdgeInsets.all(8),
+                margin: const EdgeInsets.symmetric(vertical: 8),
+                child: Row(
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('مبلغ العمليه: ${transaction.amount}'),
+                        Text('طريقه الدفع: ${transaction.payMethod}'),
+                        Text('نوع العمليه: ${transaction.type}'),
+                      ],
+                    ),
+                    const Expanded(child: SizedBox()),
+                    Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: IconButton(
+                          onPressed: () {
+                            widget.client
+                                .deleteTransaction(widget.client, transaction);
+                          },
+                          icon: const Icon(
+                            Icons.delete,
+                            color: AppColors.myRed,
+                          )),
+                    ),
+                  ],
+                ),
               ),
             );
           },
