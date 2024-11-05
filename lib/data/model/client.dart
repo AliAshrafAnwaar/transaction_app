@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:transaction_app/data/model/transaction.dart';
 
 class Client {
@@ -43,6 +45,7 @@ class Client {
       }
     }
     clients.add(client);
+    allTransactions.insert(0, client.transactions![0]);
     print(2);
     return;
   }
@@ -122,12 +125,6 @@ List<Client> clients = [
 
 List<Transaction> trans1 = [
   Transaction(
-    amount: 150,
-    payMethod: 'نقدي',
-    type: 'شراء',
-    phoneNumber: '0155501234',
-  ),
-  Transaction(
     amount: 75,
     payMethod: 'بطاقة',
     type: 'سحب',
@@ -138,6 +135,18 @@ List<Transaction> trans1 = [
     payMethod: 'تحويل',
     type: 'إيداع',
     phoneNumber: '0155501234',
+  ),
+  Transaction(
+    amount: 100,
+    payMethod: 'تحويل',
+    type: 'إيداع',
+    phoneNumber: '0123456789',
+  ),
+  Transaction(
+    amount: 90,
+    payMethod: 'نقدي',
+    type: 'سحب',
+    phoneNumber: '0119988776',
   ),
 ];
 
@@ -158,15 +167,76 @@ List<Transaction> trans2 = [
 
 List<Transaction> trans3 = [
   Transaction(
-    amount: 120,
+    amount: 75,
     payMethod: 'بطاقة',
-    type: 'شراء',
+    type: 'سحب',
+    phoneNumber: '0155501234',
+  ),
+  Transaction(
+    amount: 200,
+    payMethod: 'تحويل',
+    type: 'إيداع',
+    phoneNumber: '0155501234',
+  ),
+  Transaction(
+    amount: 100,
+    payMethod: 'تحويل',
+    type: 'إيداع',
+    phoneNumber: '0123456789',
+  ),
+  Transaction(
+    amount: 90,
+    payMethod: 'نقدي',
+    type: 'سحب',
+    phoneNumber: '0119988776',
+  ),
+];
+
+List<Transaction> trans4 = [
+  Transaction(
+    amount: 100,
+    payMethod: 'تحويل',
+    type: 'إيداع',
+    phoneNumber: '0123456789',
+  ),
+  Transaction(
+    amount: 90,
+    payMethod: 'نقدي',
+    type: 'سحب',
+    phoneNumber: '0119988776',
+  ),
+];
+
+List<Transaction> allTransactions = [
+  // Manually filtered transactions with only "سحب" and "إيداع"
+  Transaction(
+    amount: 75,
+    payMethod: 'بطاقة',
+    type: 'سحب',
+    phoneNumber: '0155501234',
+  ),
+  Transaction(
+    amount: 200,
+    payMethod: 'تحويل',
+    type: 'إيداع',
+    phoneNumber: '0155501234',
+  ),
+  Transaction(
+    amount: 100,
+    payMethod: 'تحويل',
+    type: 'إيداع',
+    phoneNumber: '0123456789',
+  ),
+  Transaction(
+    amount: 90,
+    payMethod: 'نقدي',
+    type: 'سحب',
     phoneNumber: '0119988776',
   ),
   Transaction(
-    amount: 300,
-    payMethod: 'تحويل',
-    type: 'تحويل',
+    amount: 50,
+    payMethod: 'بطاقة',
+    type: 'إيداع',
     phoneNumber: '0119988776',
   ),
   Transaction(
@@ -181,15 +251,10 @@ List<Transaction> trans3 = [
     type: 'إيداع',
     phoneNumber: '0119988776',
   ),
-];
-
-List<Transaction> trans4 = [
   Transaction(
-    amount: 25,
-    payMethod: 'نقدي',
-    type: 'شراء',
-    phoneNumber: '0101234567',
+    amount: 100,
+    payMethod: 'تحويل',
+    type: 'إيداع',
+    phoneNumber: '0123456789',
   ),
 ];
-
-List<Transaction> allTransactions = [];

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:transaction_app/core/app_colors.dart';
+import 'package:transaction_app/features/display/all_transactions.dart';
 import 'package:transaction_app/features/display/display.dart';
 import 'package:transaction_app/features/home/application.dart';
 
@@ -12,8 +14,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // List of pages to display for each bottom navigation item
   final List<Widget> _pages = [
-    Application(),
-    Display(),
+    const Application(),
+    const AllTransactions(),
+    const Display(),
     AdminPage(),
   ];
 
@@ -28,6 +31,8 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: _pages[_selectedIndex], // Display the selected page
       bottomNavigationBar: BottomNavigationBar(
+        selectedItemColor: AppColors.primaryBlue,
+        unselectedItemColor: AppColors.hintColor,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
@@ -36,6 +41,10 @@ class _HomeScreenState extends State<HomeScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.list),
             label: 'المعاملات',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'العملاء',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.admin_panel_settings),
@@ -53,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
 class AdminPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return const Center(
       child: Text('Admin Page', style: TextStyle(fontSize: 24)),
     );
   }
