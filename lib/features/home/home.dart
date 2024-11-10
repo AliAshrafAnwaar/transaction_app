@@ -31,7 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: _pages[_selectedIndex], // Display the selected page
       bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: AppColors.primaryBlue,
+        selectedItemColor: const Color.fromARGB(255, 103, 80, 164),
         unselectedItemColor: AppColors.hintColor,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(

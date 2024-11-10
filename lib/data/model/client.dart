@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:transaction_app/data/model/transaction.dart';
 
 class Client {
@@ -35,18 +33,15 @@ class Client {
 
   // Add to Alltransactions and to Client
   void addClient(Client client) {
-    print(client.phoneNumber);
     for (var c in clients) {
-      print('${client.phoneNumber} + ${c.phoneNumber}');
       if (client.phoneNumber == c.phoneNumber) {
         c.transactions!.add(client.transactions![0]);
-        allTransactions.add(client.transactions![0]);
+        allTransactions.insert(0, client.transactions![0]);
         return;
       }
     }
     clients.add(client);
     allTransactions.insert(0, client.transactions![0]);
-    print(2);
     return;
   }
 
@@ -129,24 +124,28 @@ List<Transaction> trans1 = [
     payMethod: 'بطاقة',
     type: 'سحب',
     phoneNumber: '0155501234',
+    time: DateTime(2002),
   ),
   Transaction(
     amount: 200,
     payMethod: 'تحويل',
     type: 'إيداع',
     phoneNumber: '0155501234',
+    time: DateTime(2002),
   ),
   Transaction(
     amount: 100,
     payMethod: 'تحويل',
     type: 'إيداع',
     phoneNumber: '0123456789',
+    time: DateTime(2002),
   ),
   Transaction(
     amount: 90,
     payMethod: 'نقدي',
     type: 'سحب',
     phoneNumber: '0119988776',
+    time: DateTime(2002),
   ),
 ];
 
@@ -156,12 +155,14 @@ List<Transaction> trans2 = [
     payMethod: 'نقدي',
     type: 'شراء',
     phoneNumber: '0123456789',
+    time: DateTime(2002),
   ),
   Transaction(
     amount: 100,
     payMethod: 'تحويل',
     type: 'إيداع',
     phoneNumber: '0123456789',
+    time: DateTime(2002),
   ),
 ];
 
@@ -171,24 +172,28 @@ List<Transaction> trans3 = [
     payMethod: 'بطاقة',
     type: 'سحب',
     phoneNumber: '0155501234',
+    time: DateTime(2002),
   ),
   Transaction(
     amount: 200,
     payMethod: 'تحويل',
     type: 'إيداع',
     phoneNumber: '0155501234',
+    time: DateTime(2002),
   ),
   Transaction(
     amount: 100,
     payMethod: 'تحويل',
     type: 'إيداع',
     phoneNumber: '0123456789',
+    time: DateTime(2002),
   ),
   Transaction(
     amount: 90,
     payMethod: 'نقدي',
     type: 'سحب',
     phoneNumber: '0119988776',
+    time: DateTime(2002),
   ),
 ];
 
@@ -198,11 +203,13 @@ List<Transaction> trans4 = [
     payMethod: 'تحويل',
     type: 'إيداع',
     phoneNumber: '0123456789',
+    time: DateTime(2002),
   ),
   Transaction(
     amount: 90,
     payMethod: 'نقدي',
     type: 'سحب',
+    time: DateTime(2002),
     phoneNumber: '0119988776',
   ),
 ];
@@ -213,16 +220,19 @@ List<Transaction> allTransactions = [
     amount: 75,
     payMethod: 'بطاقة',
     type: 'سحب',
+    time: DateTime(2002),
     phoneNumber: '0155501234',
   ),
   Transaction(
     amount: 200,
     payMethod: 'تحويل',
     type: 'إيداع',
+    time: DateTime(2002),
     phoneNumber: '0155501234',
   ),
   Transaction(
     amount: 100,
+    time: DateTime(2002),
     payMethod: 'تحويل',
     type: 'إيداع',
     phoneNumber: '0123456789',
@@ -230,23 +240,27 @@ List<Transaction> allTransactions = [
   Transaction(
     amount: 90,
     payMethod: 'نقدي',
+    time: DateTime(2002),
     type: 'سحب',
     phoneNumber: '0119988776',
   ),
   Transaction(
     amount: 50,
     payMethod: 'بطاقة',
+    time: DateTime(2002),
     type: 'إيداع',
     phoneNumber: '0119988776',
   ),
   Transaction(
     amount: 90,
     payMethod: 'نقدي',
+    time: DateTime(2002),
     type: 'سحب',
     phoneNumber: '0119988776',
   ),
   Transaction(
     amount: 50,
+    time: DateTime(2002),
     payMethod: 'بطاقة',
     type: 'إيداع',
     phoneNumber: '0119988776',
@@ -254,6 +268,7 @@ List<Transaction> allTransactions = [
   Transaction(
     amount: 100,
     payMethod: 'تحويل',
+    time: DateTime(2002),
     type: 'إيداع',
     phoneNumber: '0123456789',
   ),

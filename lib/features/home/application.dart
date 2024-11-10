@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 import 'package:transaction_app/data/model/client.dart';
 import 'package:transaction_app/data/model/transaction.dart';
 import 'package:transaction_app/features/shared/styled_button.dart';
@@ -18,6 +19,8 @@ class _ApplicationState extends State<Application> {
   final TextEditingController typeController = TextEditingController();
   final TextEditingController dateController = TextEditingController();
   final TextEditingController paymentMethodController = TextEditingController();
+
+  final DateTime? dateTime = DateTime.now();
 
   final GlobalKey<FormState> _formKey =
       GlobalKey<FormState>(); // Add a global key for form validation
@@ -43,7 +46,7 @@ class _ApplicationState extends State<Application> {
       String phoneNumber = phoneController.text;
       double amount = double.parse(amountController.text);
       String type = typeController.text;
-      String date = dateController.text;
+      DateTime date = dateTime!;
       String payMethod = paymentMethodController.text;
 
       // Here you can add logic to process the input, e.g., save it to a database
@@ -51,6 +54,7 @@ class _ApplicationState extends State<Application> {
           amount: amount,
           payMethod: payMethod,
           type: type,
+          time: date,
           phoneNumber: phoneNumber);
       Client ins = Client(
           name: name,
@@ -108,12 +112,29 @@ class _ApplicationState extends State<Application> {
                 hint: "نوع العمليه",
                 icon: Icons.type_specimen,
                 controller: typeController,
-                options: ["ايداع", "سحب"],
+                options: const ["ايداع", "سحب"],
               ),
-              StyledTextField(
-                hint: "تاريخ العمليه",
-                icon: Icons.timelapse,
-                controller: dateController,
+              GestureDetector(
+                onTap: () async {
+                  final DateTime? dateTime =
+                      await showOmniDateTimePicker(context: context);
+
+                  // Use dateTime here
+                  if (dateTime != null) {
+                    dateController.text =
+                        '${dateTime.year}/${dateTime.month}/${dateTime.day}  الساعه: ${(dateTime.hour > 12) ? '${dateTime.hour - 12}:${dateTime.minute}' : '${dateTime.hour} : ${dateTime.minute}'}${(dateTime.hour > 12) ? 'م' : 'ص'}';
+                  }
+
+                  debugPrint('dateTime: $dateTime');
+                },
+                child: AbsorbPointer(
+                  child: StyledTextField(
+                    hint: 'التاريخ',
+                    icon: Icons.timelapse,
+                    timeCheck: true,
+                    controller: dateController,
+                  ),
+                ),
               ),
               StyledTextField(
                 hint: "طريقه الدفع",

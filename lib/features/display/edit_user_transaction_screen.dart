@@ -54,6 +54,7 @@ class _EditUserTransactionScreenState extends State<EditUserTransactionScreen> {
           amount: double.parse(_amountController.text),
           payMethod: _payMethodController.text,
           type: _typeController.text,
+          time: DateTime.now(),
           phoneNumber: widget.client.phoneNumber!);
       widget.client
           .editTransaction(widget.client, transaction, widget.transaction);

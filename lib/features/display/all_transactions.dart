@@ -20,7 +20,6 @@ class _AllTransactionsState extends State<AllTransactions> {
     super.initState();
     filteredClients =
         List.from(allTransactions); // Initialize with all transactions
-
     // Add listener to search controller
     searchController.addListener(() {
       filterClients();
@@ -39,7 +38,7 @@ class _AllTransactionsState extends State<AllTransactions> {
     });
   }
 
-  void sortClients() {
+  void sortClients({bool? byPhone}) {
     if (sortOption == 'phoneNumber') {
       filteredClients.sort((a, b) => a.phoneNumber.compareTo(b.phoneNumber));
     }
@@ -89,6 +88,13 @@ class _AllTransactionsState extends State<AllTransactions> {
                         Text('نوع: ${filteredClients[index].type}'),
                         const SizedBox(height: 5),
                         Text('المبلغ: ${filteredClients[index].amount}'),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                            'تاريخ: ${filteredClients[index].time.year} / ${filteredClients[index].time.month} / ${filteredClients[index].time.day}'),
+                        Text(
+                            'الساعه:  ${(filteredClients[index].time.hour > 12) ? '${filteredClients[index].time.hour - 12}:${filteredClients[index].time.minute}' : '${filteredClients[index].time.hour} : ${filteredClients[index].time.minute}'}${(filteredClients[index].time.hour > 12) ? 'م' : 'ص'}')
                       ],
                     ),
                   ),

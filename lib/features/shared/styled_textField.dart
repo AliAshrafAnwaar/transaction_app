@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 import 'package:transaction_app/core/app_colors.dart';
 
 class StyledTextField extends StatefulWidget {
@@ -7,6 +8,7 @@ class StyledTextField extends StatefulWidget {
       required this.icon,
       this.isPassword,
       this.controller,
+      this.timeCheck,
       this.password,
       this.options,
       super.key});
@@ -16,6 +18,7 @@ class StyledTextField extends StatefulWidget {
   final bool? isPassword;
   final TextEditingController? controller;
   final TextEditingController? password;
+  final bool? timeCheck;
   final List<String>? options; // List of options for selection
 
   @override
@@ -72,8 +75,9 @@ class _StyledTextFieldState extends State<StyledTextField> {
       child: TextFormField(
         style: Theme.of(context).textTheme.bodyMedium,
         controller: widget.controller,
-        readOnly:
-            widget.options != null, // Make it read-only if options are provided
+        readOnly: widget.options != null ||
+            widget.timeCheck ==
+                true, // Make it read-only if options are provided
         validator: (value) {
           if (value == null || value.isEmpty) {
             return 'Please enter ${widget.hint}';

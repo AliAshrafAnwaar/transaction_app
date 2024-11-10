@@ -36,7 +36,6 @@ ThemeData appTheme = ThemeData(
     bodySmall: TextStyle(
       color: AppColors.hintColor,
       fontSize: 14,
-      fontFamily: 'Poppins',
     ),
 
     //text for small quote
@@ -44,21 +43,16 @@ ThemeData appTheme = ThemeData(
       color: AppColors.secondaryText,
       fontSize: 14,
       fontWeight: FontWeight.w400,
-      fontFamily: 'Poppins',
     ),
 
     //error style
     bodyLarge: TextStyle(
-        color: AppColors.myRed,
-        fontSize: 14,
-        fontFamily: 'Poppins',
-        fontWeight: FontWeight.w400),
+        color: AppColors.myRed, fontSize: 14, fontWeight: FontWeight.w400),
 
     //normal black text
     headlineMedium: TextStyle(
         color: AppColors.primaryText,
         fontSize: 14,
-        fontFamily: 'Poppins',
         fontWeight: FontWeight.w400),
 
     // company name style
@@ -66,7 +60,6 @@ ThemeData appTheme = ThemeData(
       color: AppColors.primaryBlue,
       fontSize: 22,
       fontWeight: FontWeight.w600,
-      fontFamily: 'Poppins',
     ),
 
     // Title
@@ -74,7 +67,6 @@ ThemeData appTheme = ThemeData(
       color: AppColors.primaryText,
       fontSize: 24,
       fontWeight: FontWeight.w600,
-      fontFamily: 'Poppins',
     ),
 
     //info display
@@ -82,7 +74,6 @@ ThemeData appTheme = ThemeData(
       color: AppColors.primaryText,
       fontSize: 14,
       fontWeight: FontWeight.w500,
-      fontFamily: 'Poppins',
     ),
 
     //info titles
@@ -90,12 +81,8 @@ ThemeData appTheme = ThemeData(
       color: AppColors.primaryText,
       fontSize: 16,
       fontWeight: FontWeight.w500,
-      fontFamily: 'Poppins',
     ),
   ),
-
-  //font
-  fontFamily: 'Poppins',
 
   //pointer theme
   textSelectionTheme: TextSelectionThemeData(
