@@ -1,50 +1,62 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:transaction_app/core/app_colors.dart';
 import 'package:transaction_app/data/model/client.dart';
-import 'package:transaction_app/features/display/client_transactions.dart';
+import 'package:transaction_app/features/client/client_transactions.dart';
+import 'package:transaction_app/providers/client_provider.dart';
 
-class Display extends StatefulWidget {
-  const Display({super.key});
+class ClientsScreen extends ConsumerStatefulWidget {
+  const ClientsScreen({super.key});
 
   @override
-  State<Display> createState() => _DisplayState();
+  ConsumerState<ClientsScreen> createState() => _ClientsScreenState();
 }
 
-class _DisplayState extends State<Display> {
-  List<Client> filteredClients = clients; // List to hold filtered clients
-  final TextEditingController searchController = TextEditingController();
+class _ClientsScreenState extends ConsumerState<ClientsScreen> {
+  late TextEditingController searchController;
   String sortOption = 'name'; // Default sort option
+  List<Client> filteredClients = [];
 
   @override
   void initState() {
     super.initState();
-    // Add listener to search controller
+    searchController = TextEditingController();
     searchController.addListener(() {
-      filterClients();
+      setState(() {}); // Rebuild on search input change
     });
   }
 
-  void filterClients() {
-    String query = searchController.text.toLowerCase();
-    setState(() {
-      filteredClients = clients.where((client) {
-        return client.name!.toLowerCase().contains(query) ||
-            client.phoneNumber!.contains(query);
-      }).toList();
-      sortClients(); // Sort the filtered clients
-    });
-  }
-
-  void sortClients() {
-    if (sortOption == 'name') {
-      filteredClients.sort((a, b) => a.name!.compareTo(b.name!));
-    } else if (sortOption == 'phone') {
-      filteredClients.sort((a, b) => a.phoneNumber!.compareTo(b.phoneNumber!));
-    }
+  @override
+  void dispose() {
+    searchController.dispose(); // Dispose of the controller
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final allClients = ref.watch(clientProviderProvider).toList();
+    final query = searchController.text.toLowerCase();
+
+    // Local function for filtering clients
+    List<Client> filterClients() {
+      return allClients.where((client) {
+        return client.name!.toLowerCase().contains(query) ||
+            client.phoneNumber!.contains(query);
+      }).toList();
+    }
+
+    // Local function for sorting clients
+    void sortClients(List<Client> clients) {
+      if (sortOption == 'name') {
+        clients.sort((a, b) => a.name!.compareTo(b.name!));
+      } else if (sortOption == 'phone') {
+        clients.sort((a, b) => a.phoneNumber!.compareTo(b.phoneNumber!));
+      }
+    }
+
+    filteredClients = filterClients();
+    sortClients(filteredClients);
+
     return SafeArea(
       child: Column(
         children: [
@@ -59,9 +71,8 @@ class _DisplayState extends State<Display> {
               ),
             ),
           ),
-
           const SizedBox(height: 5),
-          Icon(Icons.more_horiz),
+          const Icon(Icons.more_horiz),
           const SizedBox(height: 5),
 
           // Client List
@@ -76,8 +87,6 @@ class _DisplayState extends State<Display> {
                       MaterialPageRoute(
                         builder: (context) => ClientTransactions(
                           client: filteredClients[index],
-                          name: filteredClients[index].name!,
-                          phoneNumber: filteredClients[index].phoneNumber!,
                         ),
                       ),
                     );
@@ -106,11 +115,5 @@ class _DisplayState extends State<Display> {
         ],
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    searchController.dispose(); // Dispose of the controller
-    super.dispose();
   }
 }

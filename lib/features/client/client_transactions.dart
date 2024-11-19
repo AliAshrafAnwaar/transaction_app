@@ -1,30 +1,31 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:transaction_app/core/app_colors.dart';
 import 'package:transaction_app/data/model/client.dart';
 import 'package:transaction_app/data/model/transaction.dart';
-import 'package:transaction_app/features/display/edit_user_screen.dart';
-import 'package:transaction_app/features/display/edit_user_transaction_screen.dart';
+import 'package:transaction_app/features/client/widgets/edit_user_screen.dart';
+import 'package:transaction_app/features/client/widgets/edit_user_transaction_screen.dart';
 import 'package:transaction_app/features/shared/styled_button.dart';
+import 'package:transaction_app/providers/client_provider.dart';
 
-class ClientTransactions extends StatefulWidget {
-  final String name;
-  final String phoneNumber;
+class ClientTransactions extends ConsumerStatefulWidget {
   final Client client;
 
   const ClientTransactions({
-    required this.phoneNumber,
-    required this.name,
     required this.client,
     super.key,
   });
 
   @override
-  State<ClientTransactions> createState() => _ClientTransactionsState();
+  ConsumerState<ClientTransactions> createState() => _ClientTransactionsState();
 }
 
-class _ClientTransactionsState extends State<ClientTransactions> {
+class _ClientTransactionsState extends ConsumerState<ClientTransactions> {
   @override
   Widget build(BuildContext context) {
+    Client clientDetails = ref
+        .watch(clientProviderProvider)
+        .firstWhere((e) => (e == widget.client) ? true : false);
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -38,7 +39,7 @@ class _ClientTransactionsState extends State<ClientTransactions> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => EditUserScreen(
-                              client: widget.client,
+                              client: clientDetails,
                             )),
                   );
                 }
@@ -55,21 +56,21 @@ class _ClientTransactionsState extends State<ClientTransactions> {
             ),
           ),
         ],
-        title: Text(widget.name),
+        title: Text(clientDetails.name.toString()),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ListView.builder(
-          itemCount: widget.client.transactions!.length,
+          itemCount: clientDetails.transactions!.length,
           itemBuilder: (context, index) {
-            Transaction transaction = widget.client.transactions![index];
+            Transaction transaction = clientDetails.transactions![index];
             return GestureDetector(
               onTap: () {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => EditUserTransactionScreen(
-                              client: widget.client,
+                              client: clientDetails,
                               transaction: transaction,
                             )));
               },
@@ -95,8 +96,9 @@ class _ClientTransactionsState extends State<ClientTransactions> {
                       padding: const EdgeInsets.all(16),
                       child: IconButton(
                           onPressed: () {
-                            widget.client
-                                .deleteTransaction(widget.client, transaction);
+                            ref
+                                .read(clientProviderProvider.notifier)
+                                .deleteTransaction(clientDetails, transaction);
                           },
                           icon: const Icon(
                             Icons.delete,
@@ -112,7 +114,10 @@ class _ClientTransactionsState extends State<ClientTransactions> {
       ),
       bottomNavigationBar: StyledButton(
           onPressed: () {
-            widget.client.deleteClient(widget.client);
+            Navigator.pop(context);
+            ref
+                .read(clientProviderProvider.notifier)
+                .deleteClient(clientDetails);
           },
           text: 'حذف العميل'),
     );

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:transaction_app/data/model/client.dart';
 import 'package:transaction_app/data/model/transaction.dart';
 import 'package:transaction_app/features/shared/styled_button.dart';
 import 'package:transaction_app/features/shared/styled_textField.dart';
+import 'package:transaction_app/providers/client_provider.dart';
 
-class EditUserTransactionScreen extends StatefulWidget {
+class EditUserTransactionScreen extends ConsumerStatefulWidget {
   const EditUserTransactionScreen({
     required this.client,
     required this.transaction,
@@ -15,11 +17,12 @@ class EditUserTransactionScreen extends StatefulWidget {
   final Transaction transaction;
 
   @override
-  State<EditUserTransactionScreen> createState() =>
+  ConsumerState<EditUserTransactionScreen> createState() =>
       _EditUserTransactionScreenState();
 }
 
-class _EditUserTransactionScreenState extends State<EditUserTransactionScreen> {
+class _EditUserTransactionScreenState
+    extends ConsumerState<EditUserTransactionScreen> {
   // TextEditingControllers to manage the input fields
   late TextEditingController _amountController;
   late TextEditingController _payMethodController;
@@ -56,7 +59,8 @@ class _EditUserTransactionScreenState extends State<EditUserTransactionScreen> {
           type: _typeController.text,
           time: DateTime.now(),
           phoneNumber: widget.client.phoneNumber!);
-      widget.client
+      ref
+          .read(clientProviderProvider.notifier)
           .editTransaction(widget.client, transaction, widget.transaction);
       print("Form is valid. Proceed with updating user data.");
     } else {

@@ -2,8 +2,8 @@ import 'package:transaction_app/data/model/transaction.dart';
 
 class Client {
   List<Transaction>? transactions;
-  final String? phoneNumber;
-  final String? name;
+  String? phoneNumber;
+  String? name;
   int? numberTransactions;
 
   Client(
@@ -66,14 +66,14 @@ class Client {
   // Edite Client info
   void editClient(Client newClient, Client oldClient) {
     for (var c in clients) {
-      if (oldClient.phoneNumber == c.phoneNumber) {
-        clients.remove(c);
-        clients.add(newClient);
+      if (c.phoneNumber == oldClient.phoneNumber) {
+        // Directly update the fields of the existing object
+        c.name = newClient.name;
+        c.phoneNumber = newClient.phoneNumber;
         return;
       }
     }
     print('Client not found');
-    return;
   }
 
   void editTransaction(

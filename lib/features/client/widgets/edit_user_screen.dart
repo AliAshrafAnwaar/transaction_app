@@ -1,9 +1,11 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:transaction_app/data/model/client.dart';
 import 'package:transaction_app/features/shared/styled_button.dart';
 import 'package:transaction_app/features/shared/styled_textField.dart';
+import 'package:transaction_app/providers/client_provider.dart';
 
-class EditUserScreen extends StatefulWidget {
+class EditUserScreen extends ConsumerStatefulWidget {
   const EditUserScreen({
     required this.client,
     super.key,
@@ -12,10 +14,10 @@ class EditUserScreen extends StatefulWidget {
   final Client client;
 
   @override
-  State<EditUserScreen> createState() => _EditUserScreenState();
+  ConsumerState<EditUserScreen> createState() => _EditUserScreenState();
 }
 
-class _EditUserScreenState extends State<EditUserScreen> {
+class _EditUserScreenState extends ConsumerState<EditUserScreen> {
   // TextEditingControllers to manage the input fields
   late TextEditingController _nameController;
   late TextEditingController _phoneNumberController;
@@ -49,7 +51,11 @@ class _EditUserScreenState extends State<EditUserScreen> {
           transactions: widget.client.transactions,
           numberTransactions: widget.client.numberTransactions);
       print("new: ${client.name} old: ${widget.client.name}");
-      widget.client.editClient(client, widget.client);
+      ref
+          .read(clientProviderProvider.notifier)
+          .editClient(client, widget.client);
+
+      Navigator.pop(context);
       print("Form is valid. Proceed with updating user data.");
     } else {
       // If the form is invalid, show an error

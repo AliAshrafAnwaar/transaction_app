@@ -1,69 +1,154 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
-import 'package:transaction_app/core/app_colors.dart';
-import 'package:transaction_app/features/display/all_transactions.dart';
-import 'package:transaction_app/features/display/display.dart';
-import 'package:transaction_app/features/home/application.dart';
+import 'package:omni_datetime_picker/omni_datetime_picker.dart';
+import 'package:transaction_app/data/model/client.dart';
+import 'package:transaction_app/data/model/transaction.dart';
+import 'package:transaction_app/features/shared/styled_button.dart';
+import 'package:transaction_app/features/shared/styled_textField.dart';
+import 'package:transaction_app/providers/client_provider.dart';
 
-class HomeScreen extends StatefulWidget {
+class Home extends ConsumerStatefulWidget {
+  const Home({super.key});
+
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  ConsumerState<Home> createState() => _HomeState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  int _selectedIndex = 0;
+class _HomeState extends ConsumerState<Home> {
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController amountController = TextEditingController();
+  final TextEditingController typeController = TextEditingController();
+  final TextEditingController dateController = TextEditingController();
+  final TextEditingController paymentMethodController = TextEditingController();
 
-  // List of pages to display for each bottom navigation item
-  final List<Widget> _pages = [
-    const Application(),
-    const AllTransactions(),
-    const Display(),
-    AdminPage(),
-  ];
+  final DateTime? dateTime = DateTime.now();
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index; // Update the selected index
-    });
+  final GlobalKey<FormState> _formKey =
+      GlobalKey<FormState>(); // Add a global key for form validation
+
+  @override
+  void dispose() {
+    // Dispose controllers when the widget is removed from the widget tree
+    nameController.dispose();
+    phoneController.dispose();
+    amountController.dispose();
+    typeController.dispose();
+    dateController.dispose();
+    paymentMethodController.dispose();
+    super.dispose();
   }
+
+  void onSubmit() {
+    if (_formKey.currentState!.validate()) {
+      // Validate the form
+
+      // Retrieve the text from the controllers
+      String name = nameController.text;
+      String phoneNumber = phoneController.text;
+      double amount = double.parse(amountController.text);
+      String type = typeController.text;
+      DateTime date = dateTime!;
+      String payMethod = paymentMethodController.text;
+
+      // Here you can add logic to process the input, e.g., save it to a database
+      Transaction transaction = Transaction(
+          amount: amount,
+          payMethod: payMethod,
+          type: type,
+          time: date,
+          phoneNumber: phoneNumber);
+      Client ins = Client(
+          name: name,
+          phoneNumber: phoneNumber,
+          transactions: [transaction],
+          numberTransactions: 5);
+
+      ref.read(clientProviderProvider.notifier).addClient(ins);
+
+      // Clear the text fields after submission if needed
+      nameController.clear();
+      phoneController.clear();
+      amountController.clear();
+      typeController.clear();
+      dateController.clear();
+      paymentMethodController.clear();
+    }
+  }
+
+  String selectedType = 'ايداع';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _pages[_selectedIndex], // Display the selected page
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: const Color.fromARGB(255, 103, 80, 164),
-        unselectedItemColor: AppColors.hintColor,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'المنزل',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.list),
-            label: 'المعاملات',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'العملاء',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.admin_panel_settings),
-            label: 'الاعدادات',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped, // Handle tap
+      appBar: AppBar(
+        title: const Text("تسجيل عمليه السحب"),
       ),
-    );
-  }
-}
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Form(
+          key: _formKey, // Wrap the inputs in a Form widget
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              StyledTextField(
+                hint: "الاسم",
+                icon: Icons.person,
+                controller: nameController,
+              ),
+              StyledTextField(
+                hint: "رقم الهاتف",
+                icon: Icons.phone,
+                controller: phoneController,
+              ),
+              StyledTextField(
+                hint: "المبلغ",
+                icon: Icons.money,
+                controller: amountController,
+              ),
+              StyledTextField(
+                hint: "نوع العمليه",
+                icon: Icons.type_specimen,
+                controller: typeController,
+                options: const ["ايداع", "سحب"],
+              ),
+              GestureDetector(
+                onTap: () async {
+                  final DateTime? dateTime =
+                      await showOmniDateTimePicker(context: context);
 
-// Admin Page Widget
-class AdminPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text('Admin Page', style: TextStyle(fontSize: 24)),
+                  // Use dateTime here
+                  if (dateTime != null) {
+                    dateController.text =
+                        '${dateTime.year}/${dateTime.month}/${dateTime.day}  الساعه: ${(dateTime.hour > 12) ? '${dateTime.hour - 12}:${dateTime.minute}' : '${dateTime.hour} : ${dateTime.minute}'}${(dateTime.hour > 12) ? 'م' : 'ص'}';
+                  }
+
+                  debugPrint('dateTime: $dateTime');
+                },
+                child: AbsorbPointer(
+                  child: StyledTextField(
+                    hint: 'التاريخ',
+                    icon: Icons.timelapse,
+                    timeCheck: true,
+                    controller: dateController,
+                  ),
+                ),
+              ),
+              StyledTextField(
+                hint: "طريقه الدفع",
+                icon: Icons.directions,
+                controller: paymentMethodController,
+              ),
+              const SizedBox(height: 30),
+              StyledButton(
+                onPressed: onSubmit, // Call the submit function
+                text: "تسجيل العمليه",
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
