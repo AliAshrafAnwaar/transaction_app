@@ -2,6 +2,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:transaction_app/data/model/client.dart';
 import 'package:transaction_app/data/model/transaction.dart';
 import 'package:transaction_app/data/repo/client_repo.dart';
+import 'package:transaction_app/data/repo/excel_repo.dart';
 
 part 'client_provider.g.dart';
 
@@ -39,6 +40,12 @@ class ClientProvider extends _$ClientProvider {
   void editTransaction(
       Client client, Transaction newTransaction, Transaction oldTransaction) {
     repo.editTransaction(client, newTransaction, oldTransaction);
+    ref.invalidateSelf();
+  }
+
+  void exportClientsToExcel() {
+    ExcelRepo excelRepo = ExcelRepo();
+    excelRepo.exportClientsToExcel(state);
     ref.invalidateSelf();
   }
 }

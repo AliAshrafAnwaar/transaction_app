@@ -120,6 +120,7 @@ List<Client> clients = [
 
 List<Transaction> trans1 = [
   Transaction(
+    id: 1, // Add the id field
     amount: 75,
     payMethod: 'بطاقة',
     type: 'سحب',
@@ -127,6 +128,7 @@ List<Transaction> trans1 = [
     time: DateTime(2002),
   ),
   Transaction(
+    id: 2, // Add the id field
     amount: 200,
     payMethod: 'تحويل',
     type: 'إيداع',
@@ -134,6 +136,7 @@ List<Transaction> trans1 = [
     time: DateTime(2002),
   ),
   Transaction(
+    id: 3, // Add the id field
     amount: 100,
     payMethod: 'تحويل',
     type: 'إيداع',
@@ -141,6 +144,7 @@ List<Transaction> trans1 = [
     time: DateTime(2002),
   ),
   Transaction(
+    id: 4, // Add the id field
     amount: 90,
     payMethod: 'نقدي',
     type: 'سحب',
@@ -151,6 +155,7 @@ List<Transaction> trans1 = [
 
 List<Transaction> trans2 = [
   Transaction(
+    id: 5, // Add the id field
     amount: 50,
     payMethod: 'نقدي',
     type: 'شراء',
@@ -158,6 +163,7 @@ List<Transaction> trans2 = [
     time: DateTime(2002),
   ),
   Transaction(
+    id: 6, // Add the id field
     amount: 100,
     payMethod: 'تحويل',
     type: 'إيداع',
@@ -168,6 +174,7 @@ List<Transaction> trans2 = [
 
 List<Transaction> trans3 = [
   Transaction(
+    id: 7, // Add the id field
     amount: 75,
     payMethod: 'بطاقة',
     type: 'سحب',
@@ -175,6 +182,7 @@ List<Transaction> trans3 = [
     time: DateTime(2002),
   ),
   Transaction(
+    id: 8, // Add the id field
     amount: 200,
     payMethod: 'تحويل',
     type: 'إيداع',
@@ -182,6 +190,7 @@ List<Transaction> trans3 = [
     time: DateTime(2002),
   ),
   Transaction(
+    id: 9, // Add the id field
     amount: 100,
     payMethod: 'تحويل',
     type: 'إيداع',
@@ -189,6 +198,7 @@ List<Transaction> trans3 = [
     time: DateTime(2002),
   ),
   Transaction(
+    id: 10, // Add the id field
     amount: 90,
     payMethod: 'نقدي',
     type: 'سحب',
@@ -199,6 +209,7 @@ List<Transaction> trans3 = [
 
 List<Transaction> trans4 = [
   Transaction(
+    id: 11, // Add the id field
     amount: 100,
     payMethod: 'تحويل',
     type: 'إيداع',
@@ -206,11 +217,12 @@ List<Transaction> trans4 = [
     time: DateTime(2002),
   ),
   Transaction(
+    id: 12, // Add the id field
     amount: 90,
     payMethod: 'نقدي',
     type: 'سحب',
-    time: DateTime(2002),
     phoneNumber: '0119988776',
+    time: DateTime(2002),
   ),
 ];
 

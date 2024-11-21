@@ -1,6 +1,6 @@
 class Transaction {
   final String phoneNumber;
-  late final String id;
+  late final int? id;
   final double amount;
   final String type;
   final DateTime time;
@@ -8,6 +8,7 @@ class Transaction {
 
   Transaction(
       {required this.amount,
+      this.id,
       required this.payMethod,
       required this.type,
       required this.phoneNumber,

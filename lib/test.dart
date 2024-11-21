@@ -1,44 +1,69 @@
+import 'dart:io';
+
+import 'package:easy_folder_picker/FolderPicker.dart';
 import 'package:flutter/material.dart';
-import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'Easy Folder Picker',
       debugShowCheckedModeBanner: false,
-      title: 'Omni DateTime Picker',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.cyan,
-          brightness: Brightness.light,
-        ),
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: const OmniExample(),
+      home: HomePage(),
     );
   }
 }
 
-class OmniExample extends StatelessWidget {
-  const OmniExample({super.key});
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  Directory? selectedDirectory;
+
+  Future<void> _pickDirectory(BuildContext context) async {
+    Directory? directory = selectedDirectory;
+    if (directory == null) {
+      directory = Directory(FolderPicker.rootPath);
+    }
+
+    Directory? newDirectory = await FolderPicker.pick(
+        allowFolderCreation: true,
+        context: context,
+        rootDirectory: directory,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10))));
+    setState(() {
+      selectedDirectory = newDirectory;
+      print(selectedDirectory);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
+      appBar: AppBar(
+        title: Text("Folder"),
+        centerTitle: true,
+      ),
+      body: Container(
         child: Column(
           children: [
-            ElevatedButton(
-              onPressed: () async {
-                final DateTime? dateTime =
-                    await showOmniDateTimePicker(context: context);
-
-                // Use dateTime here
-                debugPrint('dateTime: $dateTime');
+            IconButton(
+              icon: Icon(Icons.file_download),
+              onPressed: () {
+                _pickDirectory(context);
               },
-              child: const Text('Show DateTime Picker'),
             ),
+            selectedDirectory != null
+                ? Text("Selected Path : ${selectedDirectory!.path}")
+                : Container(),
           ],
         ),
       ),

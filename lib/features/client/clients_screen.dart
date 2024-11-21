@@ -63,12 +63,32 @@ class _ClientsScreenState extends ConsumerState<ClientsScreen> {
           // Search Bar
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              controller: searchController,
-              decoration: const InputDecoration(
-                labelText: 'ابحث عن عميل',
-                border: OutlineInputBorder(),
-              ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Flexible(
+                  child: TextField(
+                    controller: searchController,
+                    decoration: const InputDecoration(
+                      labelText: 'ابحث عن عميل',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ),
+                Flexible(
+                    flex: 0,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: IconButton(
+                        onPressed: () {
+                          ref
+                              .read(clientProviderProvider.notifier)
+                              .exportClientsToExcel();
+                        },
+                        icon: Icon(Icons.share),
+                      ),
+                    ))
+              ],
             ),
           ),
           const SizedBox(height: 5),

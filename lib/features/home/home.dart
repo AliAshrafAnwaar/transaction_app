@@ -53,6 +53,7 @@ class _HomeState extends ConsumerState<Home> {
 
       // Here you can add logic to process the input, e.g., save it to a database
       Transaction transaction = Transaction(
+          id: DateTime.now().millisecondsSinceEpoch,
           amount: amount,
           payMethod: payMethod,
           type: type,
