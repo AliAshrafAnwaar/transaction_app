@@ -1,10 +1,9 @@
 import 'dart:io';
 import 'package:excel/excel.dart';
-import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:transaction_app/data/model/client.dart';
-import 'package:easy_folder_picker/FolderPicker.dart';
+import 'package:file_picker/file_picker.dart';
 
 class ExcelServices {
   Future<void> exportClientsToExcel(Set<Client> clients) async {
@@ -60,31 +59,19 @@ class ExcelServices {
     } on Exception catch (e) {
       print(e);
     }
+    String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
 
-    Directory? selectedDirectory;
-
-    Future<void> _pickDirectory(BuildContext context) async {
-      Directory? directory = selectedDirectory;
-      if (directory == null) {
-        directory = Directory(FolderPicker.rootPath);
-      }
-
-      Directory? newDirectory = await FolderPicker.pick(
-        allowFolderCreation: true,
-        context: context,
-        rootDirectory: directory,
-      );
-
-      selectedDirectory = newDirectory;
-      print(selectedDirectory);
+    if (selectedDirectory == null) {
+      // User canceled the picker
     }
+    print(selectedDirectory);
 
     // Save file to storage
     try {
       // Get directory
-      Directory? directory = await getExternalStorageDirectory();
-      print(directory);
-      String filePath = '${directory!.path}/clients.xlsx';
+      // Directory? directory = await getExternalStorageDirectory();
+      // print(directory);
+      String filePath = '${selectedDirectory}/clients.xlsx';
 
       // Write file
       File(filePath)

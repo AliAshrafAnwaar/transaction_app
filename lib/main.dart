@@ -7,19 +7,19 @@ import 'package:transaction_app/test.dart';
 // put the date parameter in the transaction
 // put the conditions to check number and user in the register
 
-// void main() {
-//   runApp(ProviderScope(
-//     child: Directionality(
-//         textDirection: TextDirection.rtl,
-//         child: MaterialApp(
-//             debugShowCheckedModeBanner: false,
-//             theme: ThemeData(primarySwatch: Colors.blue),
-//             localizationsDelegates: GlobalMaterialLocalizations.delegates,
-//             supportedLocales: [Locale('ar', 'AE')],
-//             home: Application())),
-//   ));
-// }
-
 void main() {
-  runApp(MaterialApp(home: MyApp()));
+  runApp(ProviderScope(
+    child: Directionality(
+        textDirection: TextDirection.rtl,
+        child: MaterialApp(
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(primarySwatch: Colors.blue),
+            localizationsDelegates: GlobalMaterialLocalizations.delegates,
+            supportedLocales: [Locale('ar', 'AE')],
+            home: Application())),
+  ));
 }
+
+// void main() {
+//   runApp(MaterialApp(home: FilePickerDemo()));
+// }
