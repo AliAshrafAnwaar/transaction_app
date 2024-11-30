@@ -231,13 +231,13 @@ List<Transaction> allTransactions = [
     amount: 10050, // Between 10k and 15k
     payMethod: 'بطاقة',
     type: 'سحب',
-    time: DateTime.now().subtract(Duration(days: 6)), // 6 days ago
+    time: DateTime.now(), // 6 days ago
     phoneNumber: '0155501234',
   ),
   Transaction(
     amount: 14200, // Between 10k and 15k
     payMethod: 'تحويل',
-    type: 'إيداع',
+    type: 'ايداع',
     time: DateTime.now().subtract(Duration(days: 5)), // 5 days ago
     phoneNumber: '0155501234',
   ),
@@ -245,7 +245,7 @@ List<Transaction> allTransactions = [
     amount: 12000, // Between 10k and 15k
     time: DateTime.now().subtract(Duration(days: 4)), // 4 days ago
     payMethod: 'تحويل',
-    type: 'إيداع',
+    type: 'ايداع',
     phoneNumber: '0123456789',
   ),
   Transaction(
@@ -259,7 +259,7 @@ List<Transaction> allTransactions = [
     amount: 11500, // Between 10k and 15k
     payMethod: 'بطاقة',
     time: DateTime.now().subtract(Duration(days: 2)), // 2 days ago
-    type: 'إيداع',
+    type: 'ايداع',
     phoneNumber: '0119988776',
   ),
   Transaction(
@@ -273,14 +273,14 @@ List<Transaction> allTransactions = [
     amount: 13500, // Between 10k and 15k
     time: DateTime.now(), // Today
     payMethod: 'بطاقة',
-    type: 'إيداع',
+    type: 'ايداع',
     phoneNumber: '0119988776',
   ),
   Transaction(
     amount: 10100, // Between 10k and 15k
     payMethod: 'تحويل',
     time: DateTime.now().subtract(Duration(days: 2)), // 2 days ago
-    type: 'إيداع',
+    type: 'ايداع',
     phoneNumber: '0123456789',
   ),
   // New transaction
@@ -288,14 +288,14 @@ List<Transaction> allTransactions = [
     amount: 14500, // Between 10k and 15k
     payMethod: 'نقدي',
     type: 'سحب',
-    time: DateTime.now().subtract(Duration(days: 6)), // 6 days ago
+    time: DateTime.now(), // 6 days ago
     phoneNumber: '0155501234',
   ),
   // Another new transaction
   Transaction(
     amount: 11000, // Between 10k and 15k
     payMethod: 'بطاقة',
-    type: 'إيداع',
+    type: 'ايداع',
     time: DateTime.now().subtract(Duration(days: 3)), // 3 days ago
     phoneNumber: '0123456789',
   ),
