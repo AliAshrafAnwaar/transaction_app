@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:transaction_app/core/app_colors.dart';
+import 'package:transaction_app/features/admin/admin.dart';
 import 'package:transaction_app/features/transaction/all_transactions.dart';
 import 'package:transaction_app/features/client/clients_screen.dart';
 import 'package:transaction_app/features/home/home.dart';
@@ -54,16 +55,6 @@ class _ApplicationState extends State<Application> {
         currentIndex: _selectedIndex,
         onTap: _onItemTapped, // Handle tap
       ),
-    );
-  }
-}
-
-// Admin Page Widget
-class AdminPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text('Admin Page', style: TextStyle(fontSize: 24)),
     );
   }
 }

@@ -227,61 +227,76 @@ List<Transaction> trans4 = [
 ];
 
 List<Transaction> allTransactions = [
-  // Manually filtered transactions with only "سحب" and "إيداع"
   Transaction(
-    amount: 75,
+    amount: 10050, // Between 10k and 15k
     payMethod: 'بطاقة',
     type: 'سحب',
-    time: DateTime(2002),
+    time: DateTime.now().subtract(Duration(days: 6)), // 6 days ago
     phoneNumber: '0155501234',
   ),
   Transaction(
-    amount: 200,
+    amount: 14200, // Between 10k and 15k
     payMethod: 'تحويل',
     type: 'إيداع',
-    time: DateTime(2002),
+    time: DateTime.now().subtract(Duration(days: 5)), // 5 days ago
     phoneNumber: '0155501234',
   ),
   Transaction(
-    amount: 100,
-    time: DateTime(2002),
+    amount: 12000, // Between 10k and 15k
+    time: DateTime.now().subtract(Duration(days: 4)), // 4 days ago
     payMethod: 'تحويل',
     type: 'إيداع',
     phoneNumber: '0123456789',
   ),
   Transaction(
-    amount: 90,
+    amount: 10500, // Between 10k and 15k
     payMethod: 'نقدي',
-    time: DateTime(2002),
+    time: DateTime.now().subtract(Duration(days: 3)), // 3 days ago
     type: 'سحب',
     phoneNumber: '0119988776',
   ),
   Transaction(
-    amount: 50,
+    amount: 11500, // Between 10k and 15k
     payMethod: 'بطاقة',
-    time: DateTime(2002),
+    time: DateTime.now().subtract(Duration(days: 2)), // 2 days ago
     type: 'إيداع',
     phoneNumber: '0119988776',
   ),
   Transaction(
-    amount: 90,
+    amount: 14000, // Between 10k and 15k
     payMethod: 'نقدي',
-    time: DateTime(2002),
+    time: DateTime.now().subtract(Duration(days: 1)), // 1 day ago
     type: 'سحب',
     phoneNumber: '0119988776',
   ),
   Transaction(
-    amount: 50,
-    time: DateTime(2002),
+    amount: 13500, // Between 10k and 15k
+    time: DateTime.now(), // Today
     payMethod: 'بطاقة',
     type: 'إيداع',
     phoneNumber: '0119988776',
   ),
   Transaction(
-    amount: 100,
+    amount: 10100, // Between 10k and 15k
     payMethod: 'تحويل',
-    time: DateTime(2002),
+    time: DateTime.now().subtract(Duration(days: 2)), // 2 days ago
     type: 'إيداع',
+    phoneNumber: '0123456789',
+  ),
+  // New transaction
+  Transaction(
+    amount: 14500, // Between 10k and 15k
+    payMethod: 'نقدي',
+    type: 'سحب',
+    time: DateTime.now().subtract(Duration(days: 6)), // 6 days ago
+    phoneNumber: '0155501234',
+  ),
+  // Another new transaction
+  Transaction(
+    amount: 11000, // Between 10k and 15k
+    payMethod: 'بطاقة',
+    type: 'إيداع',
+    time: DateTime.now().subtract(Duration(days: 3)), // 3 days ago
     phoneNumber: '0123456789',
   ),
 ];
