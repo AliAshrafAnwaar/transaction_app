@@ -114,10 +114,9 @@ class _ClientTransactionsState extends ConsumerState<ClientTransactions> {
       ),
       bottomNavigationBar: StyledButton(
           onPressed: () {
-            Navigator.pop(context);
-            ref
-                .read(clientProviderProvider.notifier)
-                .deleteClient(clientDetails);
+            Navigator.pop(context); // Perform the pop
+            ref.read(clientProviderProvider.notifier).deleteClient(
+                clientDetails); // Perform the state update after pop
           },
           text: 'حذف العميل'),
     );

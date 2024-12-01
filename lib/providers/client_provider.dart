@@ -8,38 +8,40 @@ part 'client_provider.g.dart';
 
 @riverpod
 class ClientProvider extends _$ClientProvider {
-  ClientRepo repo = ClientRepo();
+  final ClientRepo _repo = ClientRepo();
   @override
   Set<Client> build() {
     return clients.toSet();
   }
 
   void addClient(Client client) {
-    repo.addClient(client);
+    _repo.addClient(client);
     ref.invalidateSelf();
   }
 
   // Delete Client From Client list
   void deleteClient(Client client) {
-    repo.deleteClient(client);
-    ref.invalidateSelf();
+    _repo.deleteClient(client);
+    Future.delayed(const Duration(milliseconds: 500)).then((value) {
+      ref.invalidateSelf();
+    });
   }
 
   // Delete transaction from transaction list of User
   void deleteTransaction(Client client, Transaction transaction) {
-    repo.deleteTransaction(client, transaction);
+    _repo.deleteTransaction(client, transaction);
     ref.invalidateSelf();
   }
 
   // Edite Client info
   void editClient(Client newClient, Client oldClient) {
-    repo.editClient(newClient, oldClient);
+    _repo.editClient(newClient, oldClient);
     ref.invalidateSelf();
   }
 
   void editTransaction(
       Client client, Transaction newTransaction, Transaction oldTransaction) {
-    repo.editTransaction(client, newTransaction, oldTransaction);
+    _repo.editTransaction(client, newTransaction, oldTransaction);
     ref.invalidateSelf();
   }
 
