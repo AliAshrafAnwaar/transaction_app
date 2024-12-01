@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:transaction_app/features/admin/chart.dart';
+import 'package:transaction_app/features/admin/separator.dart';
+import 'package:transaction_app/features/admin/stlyled_text_icon_button.dart';
 
 class AdminPage extends StatefulWidget {
   @override
@@ -58,22 +60,32 @@ class _AdminPageState extends State<AdminPage> {
                   maxWidth: (screenWidth > 1000) ? 1000 : screenWidth,
                   maxHeight: screenHeight > 500 ? 500 : screenHeight,
                 ),
-                child: Chart(),
+                child: const Chart(),
               ),
               const SizedBox(height: 20),
-              SizedBox(
-                height: 1, // Thickness
-                width: double.infinity, // Full width
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 100, right: 100),
-                  child: DecoratedBox(
-                    decoration:
-                        BoxDecoration(color: Colors.grey.withOpacity(0.5)),
-                  ),
-                ),
-              ),
+              const Separator(),
               const SizedBox(height: 20),
               // Additional settings or widgets can be added here
+              const StlyledTextIconButton(
+                text: 'اخراج البيانات بصيغه اكسيل',
+                icon: Icons.share_outlined,
+              ),
+              const Separator(),
+              const StlyledTextIconButton(
+                text: 'الاعدادات',
+                icon: Icons.settings,
+              ),
+              const Separator(),
+              const StlyledTextIconButton(
+                text: 'تغيير رقم الحمايه',
+                icon: Icons.password,
+              ),
+              const Separator(),
+              const StlyledTextIconButton(
+                text: 'عن التطبيق',
+                icon: Icons.info_outline,
+              ),
+              const Separator(),
             ],
           ),
         ),

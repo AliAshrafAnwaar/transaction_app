@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:transaction_app/features/application.dart';
-import 'package:transaction_app/test.dart';
-
 // put the date parameter in the transaction
 // put the conditions to check number and user in the register
 

@@ -73,6 +73,8 @@ class _StyledTextFieldState extends State<StyledTextField> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: TextFormField(
+        cursorColor: Colors.deepPurple,
+        cursorErrorColor: Colors.deepPurple,
         style: Theme.of(context).textTheme.bodyMedium,
         controller: widget.controller,
         readOnly: widget.options != null ||
@@ -80,17 +82,13 @@ class _StyledTextFieldState extends State<StyledTextField> {
                 true, // Make it read-only if options are provided
         validator: (value) {
           if (value == null || value.isEmpty) {
-            return 'Please enter ${widget.hint}';
-          } else if (value.length < 3 && widget.hint == "Full Name") {
-            return 'Please enter at least 3 in ${widget.hint}';
-          } else if (widget.hint == "E-mail" &&
-              !value.toLowerCase().contains('.com')) {
-            return "Invalid Email";
-          } else if (widget.hint == "Password" && value.length < 8) {
-            return "${widget.hint} must be at least 8 digits";
-          } else if (widget.hint == "Confirm Password" &&
-              widget.password?.text != value) {
-            return ("Doesn't match");
+            return 'برجاء ادخال ${widget.hint}';
+          } else if (value.length < 3 && widget.hint == "الاسم") {
+            return 'برجاء ادخال علي الاقل 3 في ${widget.hint}';
+          } else if (value.length < 10 && widget.hint == "رقم الهاتف") {
+            return '${widget.hint} غير صحيح ';
+          } else if (value.contains("+") && widget.hint == "رقم الهاتف") {
+            return '${widget.hint} يبدأ ب 01';
           }
           return null;
         },
@@ -101,7 +99,7 @@ class _StyledTextFieldState extends State<StyledTextField> {
               const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
           labelStyle: Theme.of(context).textTheme.headlineMedium,
           hintStyle: Theme.of(context).textTheme.bodySmall,
-          errorStyle: Theme.of(context).textTheme.bodyLarge,
+          errorStyle: TextStyle(color: Colors.red),
           prefixIcon: Icon(
             widget.icon,
             color: AppColors.hintColor,

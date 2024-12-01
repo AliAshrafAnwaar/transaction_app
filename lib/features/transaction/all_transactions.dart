@@ -61,8 +61,6 @@ class _AllTransactionsState extends State<AllTransactions> {
             ),
           ),
           const SizedBox(height: 5),
-          const Icon(Icons.more_horiz),
-          const SizedBox(height: 5),
 
           // Transaction List
           Expanded(
