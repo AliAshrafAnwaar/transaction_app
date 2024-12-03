@@ -55,28 +55,26 @@ class _ClientsScreenState extends ConsumerState<ClientsScreen> {
     sortClients(filteredClients);
 
     return SafeArea(
-      child: Column(
-        children: [
-          _buildSearchBar(),
-          const SizedBox(height: 5),
-          _buildClientList(),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            _buildSearchBar(),
+            const SizedBox(height: 5),
+            _buildClientList(),
+          ],
+        ),
       ),
     );
   }
 
   /// Builds the search bar widget.
   Widget _buildSearchBar() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Expanded(
-        child: TextField(
-          controller: searchController,
-          decoration: const InputDecoration(
-            labelText: 'ابحث عن عميل',
-            border: OutlineInputBorder(),
-          ),
-        ),
+    return TextField(
+      controller: searchController,
+      decoration: const InputDecoration(
+        labelText: 'ابحث عن عميل',
+        border: OutlineInputBorder(),
       ),
     );
   }
@@ -107,32 +105,34 @@ class _ClientsScreenState extends ConsumerState<ClientsScreen> {
 
   /// Builds a single client tile.
   Widget _buildClientTile(Client client) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ClientTransactions(client: client),
-          ),
-        );
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          color: AppColors.secondaryText.withOpacity(0.05),
-          borderRadius: BorderRadius.circular(5),
-        ),
-        padding: const EdgeInsets.all(8),
-        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'الاسم: ${client.name}',
-              style: const TextStyle(
-                  color: Colors.blue, fontWeight: FontWeight.bold),
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      elevation: 2,
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ClientTransactions(client: client),
             ),
-            Text('رقم الهاتف: ${client.phoneNumber}'),
-          ],
+          );
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('الاسم: ${client.name}',
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.blue)),
+              const SizedBox(height: 5),
+              Text('رقم الهاتف: ${client.phoneNumber}'),
+              const SizedBox(height: 5),
+            ],
+          ),
         ),
       ),
     );
