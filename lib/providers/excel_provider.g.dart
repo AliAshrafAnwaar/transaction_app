@@ -1,26 +1,26 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'client_provider.dart';
+part of 'excel_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$clientProviderHash() => r'd974fcdd53e0dcf5c3268fdce20d3e41a518326d';
+String _$excelProviderHash() => r'ebee42c2880eda2476a2dc0673bbfbaa74014b41';
 
-/// See also [ClientProvider].
-@ProviderFor(ClientProvider)
-final clientProviderProvider =
-    AutoDisposeNotifierProvider<ClientProvider, Set<Client>>.internal(
-  ClientProvider.new,
-  name: r'clientProviderProvider',
+/// See also [ExcelProvider].
+@ProviderFor(ExcelProvider)
+final excelProviderProvider =
+    AutoDisposeNotifierProvider<ExcelProvider, Object?>.internal(
+  ExcelProvider.new,
+  name: r'excelProviderProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$clientProviderHash,
+      : _$excelProviderHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$ClientProvider = AutoDisposeNotifier<Set<Client>>;
+typedef _$ExcelProvider = AutoDisposeNotifier<Object?>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

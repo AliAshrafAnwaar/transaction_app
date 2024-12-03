@@ -4,6 +4,7 @@ import 'package:transaction_app/features/admin/chart.dart';
 import 'package:transaction_app/features/admin/separator.dart';
 import 'package:transaction_app/features/admin/stlyled_text_icon_button.dart';
 import 'package:transaction_app/providers/client_provider.dart';
+import 'package:transaction_app/providers/excel_provider.dart';
 
 class AdminPage extends ConsumerStatefulWidget {
   @override
@@ -91,8 +92,8 @@ class _AdminPageState extends ConsumerState<AdminPage> {
               StlyledTextIconButton(
                 onpressed: () {
                   ref
-                      .read(clientProviderProvider.notifier)
-                      .exportClientsToExcel();
+                      .read(excelProviderProvider.notifier)
+                      .exportClientsToExcel(ref.watch(clientProviderProvider));
                 },
                 text: 'اخراج البيانات بصيغه اكسيل',
                 icon: Icons.share_outlined,
@@ -116,6 +117,12 @@ class _AdminPageState extends ConsumerState<AdminPage> {
                 },
                 text: 'عن التطبيق',
                 icon: Icons.info_outline,
+              ),
+              const Separator(),
+              StlyledTextIconButton(
+                onpressed: () {},
+                text: 'ابدأ اليوم',
+                icon: Icons.alarm_on,
               ),
               const Separator(),
             ],
