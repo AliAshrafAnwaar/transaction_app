@@ -1,8 +1,7 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:transaction_app/core/app_colors.dart';
 import 'package:transaction_app/data/model/client.dart';
-import 'package:transaction_app/features/admin/separator.dart';
 import 'package:transaction_app/features/client/client_transactions.dart';
 import 'package:transaction_app/providers/client_provider.dart';
 
@@ -22,116 +21,119 @@ class _ClientsScreenState extends ConsumerState<ClientsScreen> {
   void initState() {
     super.initState();
     searchController = TextEditingController();
-    searchController.addListener(() {
-      setState(() {}); // Rebuild on search input change
-    });
+    searchController.addListener(() => setState(() {}));
   }
 
   @override
   void dispose() {
-    searchController.dispose(); // Dispose of the controller
+    searchController.dispose();
     super.dispose();
+  }
+
+  /// Filters clients based on the search query.
+  List<Client> filterClients(List<Client> clients) {
+    final query = searchController.text.toLowerCase();
+    return clients.where((client) {
+      return client.name!.toLowerCase().contains(query) ||
+          client.phoneNumber!.contains(query);
+    }).toList();
+  }
+
+  /// Sorts clients based on the selected sort option.
+  void sortClients(List<Client> clients) {
+    if (sortOption == 'name') {
+      clients.sort((a, b) => a.name!.compareTo(b.name!));
+    } else if (sortOption == 'phone') {
+      clients.sort((a, b) => a.phoneNumber!.compareTo(b.phoneNumber!));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final allClients = ref.watch(clientProviderProvider).toList();
-    final query = searchController.text.toLowerCase();
-
-    // Local function for filtering clients
-    List<Client> filterClients() {
-      return allClients.where((client) {
-        return client.name!.toLowerCase().contains(query) ||
-            client.phoneNumber!.contains(query);
-      }).toList();
-    }
-
-    // Local function for sorting clients
-    void sortClients(List<Client> clients) {
-      if (sortOption == 'name') {
-        clients.sort((a, b) => a.name!.compareTo(b.name!));
-      } else if (sortOption == 'phone') {
-        clients.sort((a, b) => a.phoneNumber!.compareTo(b.phoneNumber!));
-      }
-    }
-
-    filteredClients = filterClients();
+    filteredClients = filterClients(allClients);
     sortClients(filteredClients);
 
     return SafeArea(
       child: Column(
         children: [
-          // Search Bar
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Flexible(
-                  child: TextField(
-                    controller: searchController,
-                    decoration: const InputDecoration(
-                      labelText: 'ابحث عن عميل',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                ),
-                Flexible(
-                    flex: 0,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: IconButton(
-                        onPressed: () {
-                          ref
-                              .read(clientProviderProvider.notifier)
-                              .exportClientsToExcel();
-                        },
-                        icon: Icon(Icons.share),
-                      ),
-                    ))
-              ],
-            ),
-          ),
+          _buildSearchBar(),
           const SizedBox(height: 5),
-
-          // Client List
-          Expanded(
-            child: ListView.builder(
-              itemCount: filteredClients.length,
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ClientTransactions(
-                          client: filteredClients[index],
-                        ),
-                      ),
-                    );
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: AppColors.secondaryText.withOpacity(0.05),
-                      borderRadius: const BorderRadius.all(Radius.circular(5)),
-                    ),
-                    padding: const EdgeInsets.all(8),
-                    margin: const EdgeInsets.symmetric(vertical: 8),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('الاسم: ${filteredClients[index].name}'),
-                        Text(
-                            'رقم الهاتف: ${filteredClients[index].phoneNumber}'),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
+          _buildClientList(),
         ],
+      ),
+    );
+  }
+
+  /// Builds the search bar widget.
+  Widget _buildSearchBar() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Expanded(
+        child: TextField(
+          controller: searchController,
+          decoration: const InputDecoration(
+            labelText: 'ابحث عن عميل',
+            border: OutlineInputBorder(),
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// Builds the list of clients.
+  Widget _buildClientList() {
+    if (filteredClients.isEmpty) {
+      return const Expanded(
+        child: Center(
+          child: Text(
+            'لم يتم العثور على عملاء',
+            style: TextStyle(fontSize: 16, color: Colors.grey),
+          ),
+        ),
+      );
+    }
+
+    return Expanded(
+      child: ListView.builder(
+        itemCount: filteredClients.length,
+        itemBuilder: (context, index) {
+          final client = filteredClients[index];
+          return _buildClientTile(client);
+        },
+      ),
+    );
+  }
+
+  /// Builds a single client tile.
+  Widget _buildClientTile(Client client) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ClientTransactions(client: client),
+          ),
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppColors.secondaryText.withOpacity(0.05),
+          borderRadius: BorderRadius.circular(5),
+        ),
+        padding: const EdgeInsets.all(8),
+        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'الاسم: ${client.name}',
+              style: const TextStyle(
+                  color: Colors.blue, fontWeight: FontWeight.bold),
+            ),
+            Text('رقم الهاتف: ${client.phoneNumber}'),
+          ],
+        ),
       ),
     );
   }

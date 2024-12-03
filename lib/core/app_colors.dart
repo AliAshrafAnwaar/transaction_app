@@ -1,101 +1,49 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  static const Color primaryBlue = Color.fromARGB(255, 53, 104, 153);
-  static const Color mainColor =
-      Color.fromARGB(255, 53, 104, 153); // Main color
+  static const Color primary = Color(0xFF1E88E5);
+  static const Color onPrimary = Colors.white;
+  static const Color secondary = Color(0xFF00897B);
+  static const Color onSecondary = Colors.white;
+  static const Color background = Color(0xFFF5F5F5);
+  static const Color onBackground = Color(0xFF212121);
+  static const Color surface = Color(0xFFFFFFFF);
   static const Color primaryText = Color(0xFF0D0D26); // Primary text color
-  static const Color secondaryText = Color.fromARGB(102, 13, 13,
-      38); // text color looks like grey ex. let's log in. Apply to jobs ---> located in sign in screen
+  static const Color secondaryText = Color.fromARGB(102, 13, 13, 38);
   static const Color subText = Color(0xFF95969D); // Subtitle text color
   static const Color hintColor = Color.fromARGB(255, 175, 176, 182);
-  static const Color myWhite = Color.fromARGB(255, 250, 250, 253);
-  static const Color myWhiteBackground =
-      const Color.fromARGB(255, 250, 250, 253);
-  static const Color myRed = Color.fromARGB(255, 227, 0, 0);
+  static const Color onSurface = Color(0xFF212121);
+  static const Color myRed = Color(0xFFD32F2F);
+  static const Color onError = Colors.white;
+  static const Color primaryContainer = Color(0xFF1565C0);
+  static const Color onPrimaryContainer = Colors.white;
+  static const Color secondaryContainer = Color(0xFF004D40);
+  static const Color onSecondaryContainer = Colors.white;
 }
 
-ThemeData appTheme = ThemeData(
-  //button theme
-  colorScheme: ColorScheme.fromSeed(
-      seedColor: AppColors.primaryBlue, primary: AppColors.primaryBlue),
-
-  //Scaffold Color
-  scaffoldBackgroundColor: AppColors.myWhite,
-
-  //appbar theme
-  appBarTheme: const AppBarTheme(
-      backgroundColor: AppColors.mainColor,
-      foregroundColor: AppColors.myWhite,
-      surfaceTintColor: Colors.transparent,
-      centerTitle: true),
-
-  //Text theme
-  textTheme: const TextTheme(
-    //hint style
-    bodySmall: TextStyle(
-      color: AppColors.hintColor,
-      fontSize: 14,
-    ),
-
-    //text for small quote
-    bodyMedium: TextStyle(
-      color: AppColors.secondaryText,
-      fontSize: 14,
-      fontWeight: FontWeight.w400,
-    ),
-
-    //error style
-    bodyLarge: TextStyle(
-        color: AppColors.myRed, fontSize: 14, fontWeight: FontWeight.w400),
-
-    //normal black text
-    headlineMedium: TextStyle(
-        color: AppColors.primaryText,
-        fontSize: 14,
-        fontWeight: FontWeight.w400),
-
-    // company name style
-    titleMedium: TextStyle(
-      color: AppColors.primaryBlue,
-      fontSize: 22,
-      fontWeight: FontWeight.w600,
-    ),
-
-    // Title
-    titleLarge: TextStyle(
-      color: AppColors.primaryText,
-      fontSize: 24,
-      fontWeight: FontWeight.w600,
-    ),
-
-    //info display
-    displayMedium: TextStyle(
-      color: AppColors.primaryText,
-      fontSize: 14,
-      fontWeight: FontWeight.w500,
-    ),
-
-    //info titles
-    displayLarge: TextStyle(
-      color: AppColors.primaryText,
-      fontSize: 16,
-      fontWeight: FontWeight.w500,
-    ),
-  ),
-
-  //pointer theme
-  textSelectionTheme: TextSelectionThemeData(
-    cursorColor: AppColors.mainColor, // Change the cursor color to blue
-    selectionColor: AppColors.mainColor
-        .withOpacity(0.4), // Text selection color (highlight)
-    selectionHandleColor: Colors.blue, // The tear drop color
-  ),
-
-  cardTheme: CardTheme(
-      color: AppColors.mainColor.withOpacity(0.5),
-      surfaceTintColor: Colors.transparent,
-      shape: const RoundedRectangleBorder(),
-      margin: const EdgeInsets.only(bottom: 16),
-      shadowColor: Colors.transparent),
-);
+class AppTheme {
+  static ThemeData get lightTheme {
+    return ThemeData(
+        useMaterial3: true,
+        colorScheme: const ColorScheme(
+          brightness: Brightness.light,
+          primary: AppColors.primary,
+          onPrimary: AppColors.onPrimary,
+          secondary: AppColors.secondary,
+          onSecondary: AppColors.onSecondary,
+          background: AppColors.background,
+          onBackground: AppColors.onBackground,
+          surface: AppColors.surface,
+          onSurface: AppColors.onSurface,
+          error: AppColors.myRed,
+          onError: AppColors.onError,
+          primaryContainer: AppColors.primaryContainer,
+          onPrimaryContainer: AppColors.onPrimaryContainer,
+          secondaryContainer: AppColors.secondaryContainer,
+          onSecondaryContainer: AppColors.onSecondaryContainer,
+        ),
+        buttonTheme: const ButtonThemeData(
+          buttonColor: AppColors.primary,
+        ));
+  }
+}

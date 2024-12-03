@@ -1,16 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:transaction_app/features/admin/chart.dart';
 import 'package:transaction_app/features/admin/separator.dart';
 import 'package:transaction_app/features/admin/stlyled_text_icon_button.dart';
+import 'package:transaction_app/providers/client_provider.dart';
 
-class AdminPage extends StatefulWidget {
+class AdminPage extends ConsumerStatefulWidget {
   @override
-  State<AdminPage> createState() => _AdminPageState();
+  ConsumerState<AdminPage> createState() => _AdminPageState();
 }
 
-class _AdminPageState extends State<AdminPage> {
+class _AdminPageState extends ConsumerState<AdminPage> {
   late double screenWidth;
   late double screenHeight;
+
+  Future<String?> _showMyDialog() async {
+    return showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text('ترنزاوي'),
+        content: const Text(
+            "تطبيق ترنزاوي هو تطبيق يساعد المستخدمين على إدارة وتتبع معاملاتهم المالية بسهولة. يتيح التطبيق إمكانية تصنيف المعاملات، البحث عنها، وترتيبها بناءً على التاريخ أو المبلغ أو النوع. يتميز التطبيق بواجهة مستخدم بسيطة وسهلة الاستخدام، مع دعم للغة العربية لتوفير تجربة سلسة للمستخدمين. كما يدعم التطبيق ميزات إضافية مثل تحليل البيانات المالية وعرض تقارير مفصلة لتحسين إدارة الأموال."),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context, 'OK'),
+            child: const Text(
+              'حسنا',
+              style: TextStyle(color: Colors.blue),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,22 +88,32 @@ class _AdminPageState extends State<AdminPage> {
               const Separator(),
               const SizedBox(height: 20),
               // Additional settings or widgets can be added here
-              const StlyledTextIconButton(
+              StlyledTextIconButton(
+                onpressed: () {
+                  ref
+                      .read(clientProviderProvider.notifier)
+                      .exportClientsToExcel();
+                },
                 text: 'اخراج البيانات بصيغه اكسيل',
                 icon: Icons.share_outlined,
               ),
               const Separator(),
-              const StlyledTextIconButton(
+              StlyledTextIconButton(
+                onpressed: () {},
                 text: 'الاعدادات',
                 icon: Icons.settings,
               ),
               const Separator(),
-              const StlyledTextIconButton(
+              StlyledTextIconButton(
+                onpressed: () {},
                 text: 'تغيير رقم الحمايه',
                 icon: Icons.password,
               ),
               const Separator(),
-              const StlyledTextIconButton(
+              StlyledTextIconButton(
+                onpressed: () {
+                  _showMyDialog();
+                },
                 text: 'عن التطبيق',
                 icon: Icons.info_outline,
               ),

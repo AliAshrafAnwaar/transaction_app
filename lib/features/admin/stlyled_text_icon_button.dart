@@ -3,10 +3,14 @@ import 'package:transaction_app/core/app_colors.dart';
 
 class StlyledTextIconButton extends StatelessWidget {
   const StlyledTextIconButton(
-      {super.key, required this.text, required this.icon});
+      {super.key,
+      required this.text,
+      required this.icon,
+      required this.onpressed});
 
   final String text;
   final IconData icon;
+  final Function onpressed;
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +19,11 @@ class StlyledTextIconButton extends StatelessWidget {
       onTapDown: (_) => isPressed.value = true, // Apply filter on press
       onTapUp: (_) {
         isPressed.value = false; // Remove filter on release
+      },
+      onHorizontalDragDown: (details) => isPressed.value = true,
+      onHorizontalDragEnd: (details) => isPressed.value = false,
+      onTap: () {
+        onpressed();
       },
       child: ValueListenableBuilder(
         valueListenable: isPressed,
@@ -36,7 +45,7 @@ class StlyledTextIconButton extends StatelessWidget {
           );
         },
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          padding: const EdgeInsets.symmetric(vertical: 16),
           child: Row(
             children: [
               Icon(icon, color: Colors.blue),

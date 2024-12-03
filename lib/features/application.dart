@@ -32,7 +32,7 @@ class _ApplicationState extends State<Application> {
     return Scaffold(
       body: _pages[_selectedIndex], // Display the selected page
       bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: const Color.fromARGB(255, 103, 80, 164),
+        selectedItemColor: Colors.blue,
         unselectedItemColor: AppColors.hintColor,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
