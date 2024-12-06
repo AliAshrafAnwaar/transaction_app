@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:transaction_app/core/app_colors.dart';
 import 'package:transaction_app/data/model/client.dart';
 import 'package:transaction_app/data/model/transaction.dart';
+import 'package:transaction_app/data/services/firestore_services.dart';
 import 'package:transaction_app/features/client/widgets/edit_user_screen.dart';
 import 'package:transaction_app/features/client/widgets/edit_user_transaction_screen.dart';
 import 'package:transaction_app/features/shared/styled_button.dart';
@@ -63,7 +64,7 @@ class _ClientTransactionsState extends ConsumerState<ClientTransactions> {
         child: ListView.builder(
           itemCount: clientDetails.transactions!.length,
           itemBuilder: (context, index) {
-            Transaction transaction = clientDetails.transactions![index];
+            TransactionModel transaction = clientDetails.transactions![index];
             return GestureDetector(
               onTap: () {
                 Navigator.push(
@@ -99,6 +100,10 @@ class _ClientTransactionsState extends ConsumerState<ClientTransactions> {
                             ref
                                 .read(clientProviderProvider.notifier)
                                 .deleteTransaction(clientDetails, transaction);
+
+                            FirestoreServices().deleteClientTransaction(
+                                clientId: clientDetails.phoneNumber!,
+                                transactionId: transaction.id!);
                           },
                           icon: const Icon(
                             Icons.delete,
@@ -117,6 +122,8 @@ class _ClientTransactionsState extends ConsumerState<ClientTransactions> {
             Navigator.pop(context); // Perform the pop
             ref.read(clientProviderProvider.notifier).deleteClient(
                 clientDetails); // Perform the state update after pop
+            FirestoreServices()
+                .deleteClient(clientId: clientDetails.phoneNumber!);
           },
           text: 'حذف العميل'),
     );

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 import 'package:transaction_app/data/model/client.dart';
 import 'package:transaction_app/data/model/transaction.dart';
+import 'package:transaction_app/data/services/firestore_services.dart';
 import 'package:transaction_app/features/shared/styled_button.dart';
 import 'package:transaction_app/features/shared/styled_textField.dart';
 import 'package:transaction_app/providers/client_provider.dart';
@@ -52,8 +53,8 @@ class _HomeState extends ConsumerState<Home> {
       String payMethod = paymentMethodController.text;
 
       // Here you can add logic to process the input, e.g., save it to a database
-      Transaction transaction = Transaction(
-          id: DateTime.now().millisecondsSinceEpoch,
+      TransactionModel transaction = TransactionModel(
+          id: DateTime.now().millisecondsSinceEpoch.toString(),
           amount: amount,
           payMethod: payMethod,
           type: type,
@@ -66,6 +67,9 @@ class _HomeState extends ConsumerState<Home> {
           numberTransactions: 5);
 
       ref.read(clientProviderProvider.notifier).addClient(ins);
+
+      FirestoreServices test = FirestoreServices();
+      test.addClient(client: ins);
 
       // Clear the text fields after submission if needed
       nameController.clear();

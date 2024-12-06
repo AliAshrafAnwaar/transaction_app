@@ -13,7 +13,7 @@ class ClientRepo {
   }
 
   // Delete transaction from transaction list of User
-  void deleteTransaction(Client client, Transaction transaction) {
+  void deleteTransaction(Client client, TransactionModel transaction) {
     client.deleteTransaction(client, transaction);
   }
 
@@ -22,8 +22,8 @@ class ClientRepo {
     oldClient.editClient(newClient, oldClient);
   }
 
-  void editTransaction(
-      Client client, Transaction newTransaction, Transaction oldTransaction) {
-    client.editTransaction(client, newTransaction, oldTransaction);
+  void editTransaction(Client client, TransactionModel newTransaction,
+      TransactionModel oldTransaction) {
+    client.editClientTransaction(client, newTransaction, oldTransaction);
   }
 }

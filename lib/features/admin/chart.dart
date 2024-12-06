@@ -10,7 +10,7 @@ class Chart extends StatelessWidget {
   const Chart({super.key});
 
   Map<DateTime, Map<String, double>> groupTransactionsByDateAndType(
-      List<Transaction> transactions) {
+      List<TransactionModel> transactions) {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day); // Start of today
     final sevenDaysAgo =
@@ -25,17 +25,17 @@ class Chart extends StatelessWidget {
 
     // Group transactions and add their amounts to the corresponding dates
     for (final transaction in transactions) {
-      if (transaction.time
+      if (transaction.time!
               .isAfter(sevenDaysAgo.subtract(const Duration(seconds: 1))) &&
-          transaction.time.isBefore(today.add(const Duration(days: 1)))) {
+          transaction.time!.isBefore(today.add(const Duration(days: 1)))) {
         final date = DateTime(
-          transaction.time.year,
-          transaction.time.month,
-          transaction.time.day,
+          transaction.time!.year,
+          transaction.time!.month,
+          transaction.time!.day,
         );
         final type = transaction.type; // 'ايداع' or 'سحب'
-        groupedData[date]![type] =
-            (groupedData[date]![type] ?? 0) + transaction.amount;
+        groupedData[date]![type!] =
+            (groupedData[date]![type] ?? 0) + transaction.amount!;
       }
     }
 
@@ -72,7 +72,7 @@ class Chart extends StatelessWidget {
     });
   }
 
-  void printGroupedTransactions(List<Transaction> transactions) {
+  void printGroupedTransactions(List<TransactionModel> transactions) {
     final groupedTransactions = groupTransactionsByDateAndType(transactions);
 
     // Print the grouped transactions

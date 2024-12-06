@@ -11,7 +11,7 @@ class AllTransactions extends StatefulWidget {
 }
 
 class _AllTransactionsState extends State<AllTransactions> {
-  List<Transaction> filteredClients = [];
+  List<TransactionModel> filteredClients = [];
   final TextEditingController searchController = TextEditingController();
   String sortOption = 'date';
 
@@ -28,7 +28,7 @@ class _AllTransactionsState extends State<AllTransactions> {
     String query = searchController.text.toLowerCase();
     setState(() {
       filteredClients = allTransactions.where((transaction) {
-        return transaction.phoneNumber.toLowerCase().contains(query);
+        return transaction.phoneNumber!.toLowerCase().contains(query);
       }).toList();
       sortClients();
     });
@@ -37,12 +37,13 @@ class _AllTransactionsState extends State<AllTransactions> {
   void sortClients() {
     setState(() {
       if (sortOption == 'phoneNumber') {
-        filteredClients.sort((a, b) => a.phoneNumber.compareTo(b.phoneNumber));
+        filteredClients
+            .sort((a, b) => a.phoneNumber!.compareTo(b.phoneNumber!));
       } else if (sortOption == 'amount') {
-        filteredClients.sort((a, b) => a.amount.compareTo(b.amount));
+        filteredClients.sort((a, b) => a.amount!.compareTo(b.amount!));
       } else if (sortOption == 'date') {
         filteredClients
-            .sort((a, b) => b.time.compareTo(a.time)); // Newest first
+            .sort((a, b) => b.time!.compareTo(a.time!)); // Newest first
       }
     });
   }
@@ -116,9 +117,9 @@ class _AllTransactionsState extends State<AllTransactions> {
                           Text('المبلغ: ${transaction.amount}'),
                           const SizedBox(height: 5),
                           Text(
-                              'تاريخ: ${transaction.time.year} / ${transaction.time.month} / ${transaction.time.day}'),
+                              'تاريخ: ${transaction.time!.year} / ${transaction.time!.month} / ${transaction.time!.day}'),
                           Text(
-                            'الساعة: ${(transaction.time.hour > 12) ? '${transaction.time.hour - 12}:${transaction.time.minute}' : '${transaction.time.hour}:${transaction.time.minute}'} ${(transaction.time.hour > 12) ? 'م' : 'ص'}',
+                            'الساعة: ${(transaction.time!.hour > 12) ? '${transaction.time!.hour - 12}:${transaction.time!.minute}' : '${transaction.time!.hour}:${transaction.time!.minute}'} ${(transaction.time!.hour > 12) ? 'م' : 'ص'}',
                           ),
                         ],
                       ),

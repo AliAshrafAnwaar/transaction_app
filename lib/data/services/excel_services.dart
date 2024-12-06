@@ -41,11 +41,11 @@ class ExcelServices {
         for (var transaction in client.transactions!) {
           sheetAllTransactions.appendRow([
             TextCellValue(transaction.id.toString()),
-            TextCellValue(transaction.phoneNumber),
-            DoubleCellValue(transaction.amount),
-            TextCellValue(transaction.type),
-            TextCellValue(transaction.payMethod),
-            DateTimeCellValue.fromDateTime(transaction.time),
+            TextCellValue(transaction.phoneNumber!),
+            DoubleCellValue(transaction.amount!),
+            TextCellValue(transaction.type!),
+            TextCellValue(transaction.payMethod!),
+            DateTimeCellValue.fromDateTime(transaction.time!),
           ]);
         }
         sheetObject.appendRow([

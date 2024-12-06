@@ -14,7 +14,7 @@ class EditUserTransactionScreen extends ConsumerStatefulWidget {
   });
 
   final Client client;
-  final Transaction transaction;
+  final TransactionModel transaction;
 
   @override
   ConsumerState<EditUserTransactionScreen> createState() =>
@@ -53,7 +53,7 @@ class _EditUserTransactionScreenState
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
       // If the form is valid, proceed with the update
-      Transaction transaction = Transaction(
+      TransactionModel transaction = TransactionModel(
           amount: double.parse(_amountController.text),
           payMethod: _payMethodController.text,
           type: _typeController.text,

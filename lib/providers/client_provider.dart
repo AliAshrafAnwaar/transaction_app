@@ -28,7 +28,7 @@ class ClientProvider extends _$ClientProvider {
   }
 
   // Delete transaction from transaction list of User
-  void deleteTransaction(Client client, Transaction transaction) {
+  void deleteTransaction(Client client, TransactionModel transaction) {
     _repo.deleteTransaction(client, transaction);
     ref.invalidateSelf();
   }
@@ -39,8 +39,8 @@ class ClientProvider extends _$ClientProvider {
     ref.invalidateSelf();
   }
 
-  void editTransaction(
-      Client client, Transaction newTransaction, Transaction oldTransaction) {
+  void editTransaction(Client client, TransactionModel newTransaction,
+      TransactionModel oldTransaction) {
     _repo.editTransaction(client, newTransaction, oldTransaction);
     ref.invalidateSelf();
   }

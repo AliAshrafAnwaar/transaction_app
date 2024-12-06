@@ -1,31 +1,34 @@
-class Transaction {
-  final String phoneNumber;
-  late final int? id;
-  final double amount;
-  final String type;
-  final DateTime time;
-  final String payMethod;
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-  Transaction(
-      {required this.amount,
+class TransactionModel {
+  final String? phoneNumber;
+  late final String? id;
+  final double? amount;
+  final String? type;
+  final DateTime? time;
+  final String? payMethod;
+
+  TransactionModel(
+      {this.amount,
       this.id,
-      required this.payMethod,
-      required this.type,
-      required this.phoneNumber,
-      required this.time});
+      this.payMethod,
+      this.type,
+      this.phoneNumber,
+      this.time});
 
-  void fromFirestore(Map<String, dynamic> json) {
-    Transaction(
-        amount: json['amount'],
-        payMethod: json['payMethod'],
-        type: json['type'],
-        phoneNumber: json['phoneNumber'],
-        time: json['time']);
+  TransactionModel fromFirestore(Map<String, dynamic> json) {
+    return TransactionModel(
+        id: json['id'] as String,
+        amount: json['amount'] as double,
+        payMethod: json['payMethod'] as String,
+        type: json['type'] as String,
+        phoneNumber: json['phoneNumber'] as String,
+        time: (json['time'] as Timestamp).toDate());
   }
 
   Map<String, dynamic> toFirestore() {
     return {
-      'id': DateTime.now().millisecondsSinceEpoch.toString(),
+      'id': id,
       'amount': amount,
       'payMethod': payMethod,
       'type': type,
