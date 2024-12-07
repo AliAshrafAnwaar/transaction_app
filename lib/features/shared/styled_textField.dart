@@ -50,7 +50,7 @@ class _StyledTextFieldState extends State<StyledTextField> {
         context: context,
         builder: (BuildContext context) {
           return SimpleDialog(
-            title: Text('اختر ${widget.hint}'),
+            title: Text('${widget.hint}'),
             children: widget.options!.map((option) {
               return SimpleDialogOption(
                 onPressed: () {
@@ -70,96 +70,88 @@ class _StyledTextFieldState extends State<StyledTextField> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: TextFormField(
-        cursorColor: Colors.deepPurple,
-        cursorErrorColor: Colors.deepPurple,
-        style: Theme.of(context).textTheme.bodyMedium,
-        controller: widget.controller,
-        readOnly: widget.options != null ||
-            widget.timeCheck ==
-                true, // Make it read-only if options are provided
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return 'برجاء ادخال ${widget.hint}';
-          } else if (value.length < 3 && widget.hint == "الاسم") {
-            return 'برجاء ادخال علي الاقل 3 في ${widget.hint}';
-          } else if (value.length < 10 && widget.hint == "رقم الهاتف") {
-            return '${widget.hint} غير صحيح ';
-          } else if (value.contains("+") && widget.hint == "رقم الهاتف") {
-            return '${widget.hint} يبدأ ب 01';
-          }
-          return null;
-        },
-        obscureText: isPasswordChecker!,
-        decoration: InputDecoration(
-          hintText: widget.hint,
-          contentPadding:
-              const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
-          labelStyle: Theme.of(context).textTheme.headlineMedium,
-          hintStyle: Theme.of(context).textTheme.bodySmall,
-          errorStyle: TextStyle(color: Colors.red),
-          prefixIcon: Icon(
-            widget.icon,
-            color: AppColors.hintColor,
-            size: 20,
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
-            borderSide: const BorderSide(
-              color: AppColors.hintColor,
-              width: 1,
-            ),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
-            borderSide: const BorderSide(
-              color: AppColors.hintColor,
-            ),
-          ),
-          focusColor: AppColors.primaryText,
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
-            borderSide: const BorderSide(
-              color: AppColors.primaryText,
-              width: 1,
-            ),
-          ),
-          errorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
-            borderSide: const BorderSide(
-              color: AppColors.myRed,
-              width: 1,
-            ),
-          ),
-          focusedErrorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
-            borderSide: const BorderSide(
-              color: AppColors.myRed,
-              width: 1,
-            ),
-          ),
-          suffixIcon: widget.isPassword == true
-              ? IconButton(
-                  icon: Icon(
-                    isPasswordChecker!
-                        ? Icons.visibility
-                        : Icons.visibility_off,
-                    color: AppColors.hintColor,
-                    size: 20,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      isPasswordChecker = !isPasswordChecker!;
-                    });
-                  })
-              : const SizedBox(),
+    return TextFormField(
+      style: Theme.of(context).textTheme.bodyMedium,
+      controller: widget.controller,
+      readOnly: widget.options != null ||
+          widget.timeCheck == true, // Make it read-only if options are provided
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'برجاء ادخال ${widget.hint}';
+        } else if (value.length < 3 && widget.hint == "الاسم") {
+          return 'برجاء ادخال علي الاقل 3 في ${widget.hint}';
+        } else if (value.length < 10 && widget.hint == "رقم الهاتف") {
+          return '${widget.hint} غير صحيح ';
+        } else if (value.contains("+") && widget.hint == "رقم الهاتف") {
+          return '${widget.hint} يبدأ ب 01';
+        }
+        return null;
+      },
+      obscureText: isPasswordChecker!,
+      decoration: InputDecoration(
+        hintText: widget.hint,
+        contentPadding:
+            const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+        labelStyle: Theme.of(context).textTheme.headlineMedium,
+        hintStyle: Theme.of(context).textTheme.bodySmall,
+        errorStyle: TextStyle(color: Colors.red),
+        prefixIcon: Icon(
+          widget.icon,
+          color: AppColors.hintColor,
+          size: 20,
         ),
-        onTap: widget.options != null
-            ? _showOptionsDialog
-            : null, // Show dialog on tap
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10.0),
+          borderSide: const BorderSide(
+            color: AppColors.hintColor,
+            width: 1,
+          ),
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10.0),
+          borderSide: const BorderSide(
+            color: AppColors.hintColor,
+          ),
+        ),
+        focusColor: AppColors.primaryText,
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10.0),
+          borderSide: const BorderSide(
+            color: AppColors.primaryText,
+            width: 1,
+          ),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10.0),
+          borderSide: const BorderSide(
+            color: AppColors.myRed,
+            width: 1,
+          ),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10.0),
+          borderSide: const BorderSide(
+            color: AppColors.myRed,
+            width: 1,
+          ),
+        ),
+        suffixIcon: widget.isPassword == true
+            ? IconButton(
+                icon: Icon(
+                  isPasswordChecker! ? Icons.visibility : Icons.visibility_off,
+                  color: AppColors.hintColor,
+                  size: 20,
+                ),
+                onPressed: () {
+                  setState(() {
+                    isPasswordChecker = !isPasswordChecker!;
+                  });
+                })
+            : const SizedBox(),
       ),
+      onTap: widget.options != null
+          ? _showOptionsDialog
+          : null, // Show dialog on tap
     );
   }
 }

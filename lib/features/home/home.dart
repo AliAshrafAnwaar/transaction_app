@@ -1,12 +1,14 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
+import 'package:transaction_app/core/app_colors.dart';
 import 'package:transaction_app/data/model/client.dart';
 import 'package:transaction_app/data/model/transaction.dart';
 import 'package:transaction_app/data/services/firestore_services.dart';
 import 'package:transaction_app/features/shared/styled_button.dart';
 import 'package:transaction_app/features/shared/styled_textField.dart';
 import 'package:transaction_app/providers/client_provider.dart';
+import 'package:intl/intl.dart';
 
 class Home extends ConsumerStatefulWidget {
   const Home({super.key});
@@ -23,7 +25,7 @@ class _HomeState extends ConsumerState<Home> {
   final TextEditingController dateController = TextEditingController();
   final TextEditingController paymentMethodController = TextEditingController();
 
-  final DateTime? dateTime = DateTime.now();
+  DateTime? dateTime;
 
   final GlobalKey<FormState> _formKey =
       GlobalKey<FormState>(); // Add a global key for form validation
@@ -87,68 +89,102 @@ class _HomeState extends ConsumerState<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("تسجيل عمليه السحب"),
+        title: const Text(
+          "تسجيل",
+          style: TextStyle(color: AppColors.subText),
+        ),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
         child: Form(
           key: _formKey, // Wrap the inputs in a Form widget
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              StyledTextField(
-                hint: "الاسم",
-                icon: Icons.person,
-                controller: nameController,
-              ),
-              StyledTextField(
-                hint: "رقم الهاتف",
-                icon: Icons.phone,
-                controller: phoneController,
-              ),
-              StyledTextField(
-                hint: "المبلغ",
-                icon: Icons.money,
-                controller: amountController,
-              ),
-              StyledTextField(
-                hint: "نوع العمليه",
-                icon: Icons.type_specimen,
-                controller: typeController,
-                options: const ["ايداع", "سحب"],
-              ),
-              GestureDetector(
-                onTap: () async {
-                  final DateTime? dateTime =
-                      await showOmniDateTimePicker(context: context);
-
-                  // Use dateTime here
-                  if (dateTime != null) {
-                    dateController.text =
-                        '${dateTime.year}/${dateTime.month}/${dateTime.day}  الساعه: ${(dateTime.hour > 12) ? '${dateTime.hour - 12}:${dateTime.minute}' : '${dateTime.hour} : ${dateTime.minute}'}${(dateTime.hour > 12) ? 'م' : 'ص'}';
-                  }
-
-                  debugPrint('dateTime: $dateTime');
-                },
-                child: AbsorbPointer(
-                  child: StyledTextField(
-                    hint: 'التاريخ',
-                    icon: Icons.timelapse,
-                    timeCheck: true,
-                    controller: dateController,
-                  ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: StyledTextField(
+                  hint: "الاسم",
+                  icon: Icons.person,
+                  controller: nameController,
                 ),
               ),
-              StyledTextField(
-                hint: "طريقه الدفع",
-                icon: Icons.directions,
-                controller: paymentMethodController,
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: StyledTextField(
+                  hint: "رقم الهاتف",
+                  icon: Icons.phone,
+                  controller: phoneController,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Row(
+                  children: [
+                    Flexible(
+                      child: StyledTextField(
+                        hint: "نوع العمليه",
+                        icon: Icons.type_specimen,
+                        controller: typeController,
+                        options: const ["ايداع", "سحب"],
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 15,
+                    ),
+                    Flexible(
+                      child: InkWell(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10)),
+                        onTap: () async {
+                          dateTime =
+                              await showOmniDateTimePicker(context: context);
+                          final dateFormatter = DateFormat(
+                              'dd/MM/yy | h:ma', 'ar'); // Arabic date format
+
+                          // Use dateTime here
+                          if (dateTime != null) {
+                            final arabicDate = dateFormatter.format(dateTime!);
+                            dateController.text = arabicDate;
+                          }
+                        },
+                        child: AbsorbPointer(
+                          child: StyledTextField(
+                            hint: 'التاريخ',
+                            icon: Icons.timelapse,
+                            timeCheck: true,
+                            controller: dateController,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: StyledTextField(
+                  hint: "المبلغ",
+                  icon: Icons.money,
+                  controller: amountController,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: StyledTextField(
+                  hint: "طريقه الدفع",
+                  icon: Icons.directions,
+                  controller: paymentMethodController,
+                ),
               ),
               const SizedBox(height: 30),
-              StyledButton(
-                onPressed: onSubmit, // Call the submit function
-                text: "تسجيل العمليه",
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: StyledButton(
+                  onPressed: onSubmit, // Call the submit function
+                  text: "تسجيل العمليه",
+                ),
               ),
             ],
           ),

@@ -16,7 +16,7 @@ class Client {
   Client fromFirestore(Map<String, dynamic> json) {
     return Client(
       name: json['name'],
-      phoneNumber: json['id'],
+      phoneNumber: json['phoneNumber'],
       transactions: (json['transactions'] as List<dynamic>)
           .map((dyn) =>
               TransactionModel().fromFirestore(dyn as Map<String, dynamic>))
@@ -62,6 +62,7 @@ class Client {
 
   // Delete transaction from transaction list of User
   void deleteTransaction(Client client, TransactionModel transaction) {
+    print(client.transactions);
     client.transactions!.remove(transaction);
   }
 

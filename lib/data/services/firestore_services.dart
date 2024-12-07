@@ -8,8 +8,24 @@ class FirestoreServices {
   final transactions = FirebaseFirestore.instance.collection('Transactions');
   final clients = FirebaseFirestore.instance.collection('Clients');
 
+  // loading data
+  Future<Set<Client>> loadData() async {
+    print('load');
+    final snapshot = await clients.get();
+
+    if (snapshot.docs.isNotEmpty) {
+      final data = snapshot.docs
+          .map((doc) => Client().fromFirestore(doc.data()))
+          .toSet();
+      return data;
+    } else {
+      return {};
+    }
+  }
+
   // For adding Transaction and creating client if don't exist
   Future<void> addClient({required Client client}) async {
+    print('add');
     String clientId = client.phoneNumber!;
     TransactionModel transaction =
         client.transactions!.first; // Simplified access
@@ -44,6 +60,7 @@ class FirestoreServices {
   // Edit client data
   Future<void> editClient(
       {required String clientId, required Client updatedClient}) async {
+    print('edit');
     final clientDoc = clients.doc(clientId);
 
     // Check if client exists
@@ -65,6 +82,7 @@ class FirestoreServices {
       {required String clientId,
       required transactionId,
       required TransactionModel updatedTransaction}) async {
+    print('edit client transaction');
     final clientDoc = clients.doc(clientId);
 
     // Check if client exists
@@ -84,6 +102,7 @@ class FirestoreServices {
   Future<void> deleteClient({
     required String clientId,
   }) async {
+    print('delete client');
     final clientDoc = clients.doc(clientId);
 
     // Check if client exists
@@ -98,6 +117,7 @@ class FirestoreServices {
     required String clientId,
     required String transactionId,
   }) async {
+    print('delete client transaction');
     final clientDoc = clients.doc(clientId);
 
     // Check if client exists

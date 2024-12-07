@@ -1,12 +1,13 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:transaction_app/data/model/client.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:transaction_app/data/model/transaction.dart';
 import 'package:intl/intl.dart';
+import 'package:transaction_app/providers/client_provider.dart';
 
 late List<DateTime> sortedDates;
 
-class Chart extends StatelessWidget {
+class Chart extends ConsumerWidget {
   const Chart({super.key});
 
   Map<DateTime, Map<String, double>> groupTransactionsByDateAndType(
@@ -43,7 +44,7 @@ class Chart extends StatelessWidget {
   }
 
   List<BarChartGroupData> prepareBarChartData(
-      Map<DateTime, Map<String, double>> groupedData) {
+      Map<DateTime, Map<String, double>> groupedData, int totalCount) {
     sortedDates = groupedData.keys.toList()..sort();
 
     return List.generate(sortedDates.length, (i) {
@@ -51,13 +52,19 @@ class Chart extends StatelessWidget {
       final deposit = groupedData[date]!['ايداع']!;
       final withdrawal = groupedData[date]!['سحب']!;
 
+      // Cap values to maxY
+      final maxY = calculateAverageValue(groupedData, totalCount);
+      double cappedDeposit = deposit.clamp(0, maxY);
+      double cappedWithdrawal = withdrawal.clamp(0, maxY - cappedDeposit);
+
       return BarChartGroupData(
         x: i,
         barRods: [
           // Combined bar for stacking
           BarChartRodData(
             width: 40, // Adjust bar width
-            toY: deposit + withdrawal, // Total height (deposit + withdrawal)
+            toY: cappedWithdrawal +
+                cappedDeposit, // Total height (deposit + withdrawal)
             rodStackItems: [
               // Deposit part of the stack
               BarChartRodStackItem(0, deposit, Colors.blue),
@@ -72,18 +79,26 @@ class Chart extends StatelessWidget {
     });
   }
 
-  void printGroupedTransactions(List<TransactionModel> transactions) {
-    final groupedTransactions = groupTransactionsByDateAndType(transactions);
+  // void printGroupedTransactions(List<TransactionModel> transactions) {
+  //   final groupedTransactions = groupTransactionsByDateAndType(transactions);
 
-    // Print the grouped transactions
-    groupedTransactions.forEach((date, totalAmount) {
-      print('Date: ${date.toLocal()} | Total Amount: \$${totalAmount}');
-    });
-  }
+  //   // Print the grouped transactions
+  //   groupedTransactions.forEach((date, totalAmount) {
+  //     print('Date: ${date.toLocal()} | Total Amount: \$${totalAmount}');
+  //   });
+  // }
 
   /// Converts numbers to Arabic numerals.
   String toArabicNumerals(double value) {
-    return '${value.toInt()} ج'.split('').map((char) {
+    if (value >= 100000) {
+      // Remove the last three digits and format as "XX ألف"
+      final roundedValue =
+          (value / 1000).floor(); // Round down to the nearest thousand
+      return '${toArabicNumerals(roundedValue.toDouble())} ألف';
+    }
+
+    // Convert the number to Arabic numerals
+    return '${value.toInt()}'.split('').map((char) {
       final asciiValue = char.codeUnitAt(0);
       if (asciiValue >= 48 && asciiValue <= 57) {
         return String.fromCharCode(asciiValue + 0x0660 - 48);
@@ -92,12 +107,37 @@ class Chart extends StatelessWidget {
     }).join();
   }
 
+  double calculateAverageValue(
+      Map<DateTime, Map<String, double>> groupedData, int totalCount) {
+    final totalValues = groupedData.values
+        .expand((e) => e.values)
+        .reduce((sum, value) => sum + value); // Sum all values
+
+    // print(totalValues);
+    // print(totalCount);
+
+    return totalCount > 0
+        ? totalValues / totalCount
+        : 0.0; // Mean = sum / count
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final transactions = ref
+        .watch(clientProviderProvider)
+        .map((client) => client.transactions ?? [])
+        .expand((transactions) => transactions)
+        .toList();
+
     final dateFormatter = DateFormat('dd/MM/yy', 'ar'); // Arabic date format
-    final groupedData = groupTransactionsByDateAndType(allTransactions);
-    final chartData = prepareBarChartData(groupedData);
-    printGroupedTransactions(allTransactions);
+    final groupedData = groupTransactionsByDateAndType(transactions);
+    final chartData = prepareBarChartData(groupedData, transactions.length);
+    // printGroupedTransactions(transactions);
+
+    // Calculate average value for chart max
+    final averageValue =
+        calculateAverageValue(groupedData, transactions.length);
+    // print(averageValue);
 
     return BarChart(
       BarChartData(
@@ -106,7 +146,6 @@ class Chart extends StatelessWidget {
         alignment: BarChartAlignment.center,
         barTouchData: BarTouchData(
           touchTooltipData: BarTouchTooltipData(
-            //to adjust location of pop up
             tooltipMargin: 0,
             tooltipHorizontalOffset: 0,
             tooltipPadding: const EdgeInsets.all(8),
@@ -119,27 +158,41 @@ class Chart extends StatelessWidget {
 
               return BarTooltipItem(
                 'التاريخ: ${DateFormat('dd/MM/yyyy', 'ar').format(date)}\n'
-                'ايداع: $deposit\n'
-                'سحب: $withdrawal\n',
+                'ايداع: ${toArabicNumerals(deposit)}\n'
+                'سحب: ${toArabicNumerals(withdrawal)}\n',
                 const TextStyle(color: Colors.white, fontSize: 12),
               );
             },
           ),
         ),
+        maxY: averageValue, // Use the average value as the max Y
         titlesData: FlTitlesData(
           topTitles:
               const AxisTitles(sideTitles: SideTitles(showTitles: false)),
           rightTitles: AxisTitles(
             sideTitles: SideTitles(
               showTitles: true,
-              reservedSize: 50,
-              getTitlesWidget: (value, meta) => SideTitleWidget(
-                axisSide: meta.axisSide,
-                child: Text(
-                  toArabicNumerals(value),
-                  style: const TextStyle(fontSize: 12),
-                ),
-              ),
+              reservedSize: 60,
+              getTitlesWidget: (value, meta) {
+                // Check if the current value is close to the average value (maxY)
+                if (value == meta.max && value != 0) {
+                  return SideTitleWidget(
+                    axisSide: meta.axisSide,
+                    child: Text(
+                      '${toArabicNumerals(value)}+', // Add "+" for max value only
+                      style: const TextStyle(fontSize: 12),
+                    ),
+                  );
+                }
+
+                return SideTitleWidget(
+                  axisSide: meta.axisSide,
+                  child: Text(
+                    toArabicNumerals(value),
+                    style: const TextStyle(fontSize: 12),
+                  ),
+                );
+              },
             ),
           ),
           leftTitles:
@@ -170,11 +223,11 @@ class Chart extends StatelessWidget {
           drawVerticalLine: false,
         ),
         borderData: FlBorderData(
-          show: false, // Removes unnecessary border
+          show: false,
         ),
       ),
       duration: const Duration(milliseconds: 150), // Smooth transition
-      curve: Curves.linear, // Linear animation
+      curve: Curves.linear,
     );
   }
 }

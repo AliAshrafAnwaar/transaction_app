@@ -3,15 +3,31 @@ import 'package:transaction_app/data/model/client.dart';
 import 'package:transaction_app/data/model/transaction.dart';
 import 'package:transaction_app/data/repo/client_repo.dart';
 import 'package:transaction_app/data/repo/excel_repo.dart';
+import 'package:transaction_app/data/services/firestore_services.dart';
 
 part 'client_provider.g.dart';
 
 @riverpod
 class ClientProvider extends _$ClientProvider {
   final ClientRepo _repo = ClientRepo();
+  final FirestoreServices _ins = FirestoreServices();
+  bool _singleUse = true;
+
   @override
   Set<Client> build() {
-    return clients.toSet();
+    //one time gaining the data
+    if (_singleUse) {
+      loadData();
+      _singleUse = true;
+    }
+    ref.keepAlive();
+    return {};
+  }
+
+  void loadData() {
+    _ins.loadData().then((onValue) {
+      state = onValue;
+    });
   }
 
   void addClient(Client client) {
@@ -20,17 +36,18 @@ class ClientProvider extends _$ClientProvider {
   }
 
   // Delete Client From Client list
-  void deleteClient(Client client) {
-    _repo.deleteClient(client);
-    Future.delayed(const Duration(milliseconds: 500)).then((value) {
-      ref.invalidateSelf();
-    });
+  void deleteClient(Client client) async {
+    state.remove(client);
+    await _ins.deleteClient(clientId: client.phoneNumber!);
+    loadData();
   }
 
   // Delete transaction from transaction list of User
   void deleteTransaction(Client client, TransactionModel transaction) {
-    _repo.deleteTransaction(client, transaction);
-    ref.invalidateSelf();
+    client.transactions!.remove(transaction);
+    state = {...state, client};
+    _ins.deleteClientTransaction(
+        clientId: client.phoneNumber!, transactionId: transaction.id!);
   }
 
   // Edite Client info
@@ -42,12 +59,6 @@ class ClientProvider extends _$ClientProvider {
   void editTransaction(Client client, TransactionModel newTransaction,
       TransactionModel oldTransaction) {
     _repo.editTransaction(client, newTransaction, oldTransaction);
-    ref.invalidateSelf();
-  }
-
-  void exportClientsToExcel() {
-    ExcelRepo excelRepo = ExcelRepo();
-    excelRepo.exportClientsToExcel(state);
     ref.invalidateSelf();
   }
 }

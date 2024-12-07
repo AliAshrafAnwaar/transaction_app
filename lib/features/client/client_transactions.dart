@@ -27,6 +27,7 @@ class _ClientTransactionsState extends ConsumerState<ClientTransactions> {
     Client clientDetails = ref
         .watch(clientProviderProvider)
         .firstWhere((e) => (e == widget.client) ? true : false);
+    var clientNotifier = ref.read(clientProviderProvider.notifier);
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -100,10 +101,6 @@ class _ClientTransactionsState extends ConsumerState<ClientTransactions> {
                             ref
                                 .read(clientProviderProvider.notifier)
                                 .deleteTransaction(clientDetails, transaction);
-
-                            FirestoreServices().deleteClientTransaction(
-                                clientId: clientDetails.phoneNumber!,
-                                transactionId: transaction.id!);
                           },
                           icon: const Icon(
                             Icons.delete,
@@ -120,10 +117,8 @@ class _ClientTransactionsState extends ConsumerState<ClientTransactions> {
       bottomNavigationBar: StyledButton(
           onPressed: () {
             Navigator.pop(context); // Perform the pop
-            ref.read(clientProviderProvider.notifier).deleteClient(
+            clientNotifier.deleteClient(
                 clientDetails); // Perform the state update after pop
-            FirestoreServices()
-                .deleteClient(clientId: clientDetails.phoneNumber!);
           },
           text: 'حذف العميل'),
     );
