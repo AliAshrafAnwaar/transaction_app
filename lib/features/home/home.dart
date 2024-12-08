@@ -90,12 +90,12 @@ class _HomeState extends ConsumerState<Home> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          "تسجيل",
-          style: TextStyle(color: AppColors.subText),
+          "تسجيل العمليه",
+          style: TextStyle(color: Color.fromARGB(255, 54, 54, 54)),
         ),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Form(
           key: _formKey, // Wrap the inputs in a Form widget
           child: Column(

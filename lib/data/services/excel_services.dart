@@ -24,7 +24,6 @@ class ExcelServices {
       TextCellValue('Name'),
       TextCellValue('Phone Number'),
       TextCellValue('number of transactions'),
-      TextCellValue('tansactions')
     ]);
     sheetAllTransactions.appendRow([
       TextCellValue('ID'),
@@ -51,8 +50,7 @@ class ExcelServices {
         sheetObject.appendRow([
           TextCellValue(client.name!),
           TextCellValue(client.phoneNumber!),
-          TextCellValue(client.numberTransactions!.toString()),
-          TextCellValue(client.transactions!.first.amount.toString())
+          TextCellValue(client.numberTransactions.toString()),
         ]);
       }
     } on Exception catch (e) {

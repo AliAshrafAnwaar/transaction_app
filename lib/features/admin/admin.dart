@@ -41,6 +41,9 @@ class _AdminPageState extends ConsumerState<AdminPage> {
     screenWidth = MediaQuery.of(context).size.width;
     screenHeight = screenWidth * 0.5; // Adjust height based on width
 
+    final excelNotifier = ref.read(excelProviderProvider.notifier);
+    final ClientProvider = ref.watch(clientProviderProvider);
+
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -91,9 +94,7 @@ class _AdminPageState extends ConsumerState<AdminPage> {
               // Additional settings or widgets can be added here
               StlyledTextIconButton(
                 onpressed: () {
-                  ref
-                      .read(excelProviderProvider.notifier)
-                      .exportClientsToExcel(ref.watch(clientProviderProvider));
+                  excelNotifier.exportClientsToExcel(ClientProvider);
                 },
                 text: 'اخراج البيانات بصيغه اكسيل',
                 icon: Icons.share_outlined,
