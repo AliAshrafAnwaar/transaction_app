@@ -42,7 +42,7 @@ class _AdminPageState extends ConsumerState<AdminPage> {
     screenHeight = screenWidth * 0.5; // Adjust height based on width
 
     final excelNotifier = ref.read(excelProviderProvider.notifier);
-    final ClientProvider = ref.watch(clientProviderProvider);
+    final clientProvider = ref.watch(clientProviderProvider);
 
     return SafeArea(
       child: Padding(
@@ -54,27 +54,45 @@ class _AdminPageState extends ConsumerState<AdminPage> {
               const SizedBox(
                 height: 30,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+              Stack(
                 children: [
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Container(width: 16, height: 16, color: Colors.blue),
-                      const SizedBox(width: 8),
-                      const Text(
-                        'ايداع',
-                        style: TextStyle(fontSize: 10),
+                      Container(
+                        margin: const EdgeInsets.all(8),
+                        child: const Text(
+                          'x ألف',
+                          style: TextStyle(
+                              fontSize: 10, fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ],
                   ),
-                  const SizedBox(width: 16),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Container(width: 16, height: 16, color: Colors.purple),
-                      const SizedBox(width: 8),
-                      const Text(
-                        'سحب',
-                        style: TextStyle(fontSize: 10),
+                      Row(
+                        children: [
+                          Container(width: 16, height: 16, color: Colors.blue),
+                          const SizedBox(width: 8),
+                          const Text(
+                            'ايداع',
+                            style: TextStyle(fontSize: 10),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(width: 16),
+                      Row(
+                        children: [
+                          Container(
+                              width: 16, height: 16, color: Colors.purple),
+                          const SizedBox(width: 8),
+                          const Text(
+                            'سحب',
+                            style: TextStyle(fontSize: 10),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -94,7 +112,7 @@ class _AdminPageState extends ConsumerState<AdminPage> {
               // Additional settings or widgets can be added here
               StlyledTextIconButton(
                 onpressed: () {
-                  excelNotifier.exportClientsToExcel(ClientProvider);
+                  excelNotifier.exportClientsToExcel(clientProvider);
                 },
                 text: 'اخراج البيانات بصيغه اكسيل',
                 icon: Icons.share_outlined,

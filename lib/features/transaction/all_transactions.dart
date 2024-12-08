@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:transaction_app/data/model/client.dart';
 import 'package:transaction_app/data/model/transaction.dart';
+import 'package:transaction_app/features/shared/styled_textField.dart';
 
 class AllTransactions extends StatefulWidget {
   const AllTransactions({super.key});
@@ -58,20 +59,19 @@ class _AllTransactionsState extends State<AllTransactions> {
             Row(
               children: [
                 Expanded(
-                  child: TextField(
+                  child: StyledTextField(
                     controller: searchController,
-                    decoration: InputDecoration(
-                      labelText: 'ابحث عن عملية',
-                      prefixIcon: const Icon(Icons.search),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
+                    hint: 'ابحث عن عمليه',
+                    icon: Icons.search,
                   ),
                 ),
                 const SizedBox(width: 10),
                 DropdownButton<String>(
                   value: sortOption,
+                  padding: const EdgeInsets.all(0),
+                  alignment: Alignment.center,
+                  isDense: false, // Reduces internal padding
+                  focusColor: Colors.transparent,
                   onChanged: (value) {
                     setState(() {
                       sortOption = value!;
@@ -79,11 +79,42 @@ class _AllTransactionsState extends State<AllTransactions> {
                     });
                   },
                   items: const [
-                    DropdownMenuItem(value: 'date', child: Text('التاريخ')),
                     DropdownMenuItem(
-                        value: 'phoneNumber', child: Text('رقم الهاتف')),
-                    DropdownMenuItem(value: 'amount', child: Text('المبلغ')),
+                      value: 'date',
+                      child: Text(
+                        'التاريخ',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    DropdownMenuItem(
+                      value: 'phoneNumber',
+                      child: Text(
+                        'رقم الهاتف',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    DropdownMenuItem(
+                      value: 'amount',
+                      child: Text(
+                        'المبلغ',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                    ),
                   ],
+                  icon: const Icon(Icons.arrow_drop_down, color: Colors.blue),
+                  dropdownColor: Colors.white,
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  underline:
+                      const SizedBox(), // Removed default underline for a cleaner look
+                  borderRadius: BorderRadius.circular(
+                      8), // Smooth border for the dropdown
                 ),
               ],
             ),

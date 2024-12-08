@@ -2,14 +2,14 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:transaction_app/data/model/client.dart';
 import 'package:transaction_app/data/model/transaction.dart';
 import 'package:transaction_app/data/repo/client_repo.dart';
-import 'package:transaction_app/data/services/firestore_services.dart';
+import 'package:transaction_app/data/repo/firestore_repo.dart';
 
 part 'client_provider.g.dart';
 
 @riverpod
 class ClientProvider extends _$ClientProvider {
   final ClientRepo _repo = ClientRepo();
-  final FirestoreServices _ins = FirestoreServices();
+  final FirestoreRepo _firestoreRepoIns = FirestoreRepo();
   bool _singleUse = true;
 
   @override
@@ -24,29 +24,33 @@ class ClientProvider extends _$ClientProvider {
   }
 
   void loadData() {
-    _ins.loadData().then((onValue) {
+    _firestoreRepoIns.loadData().then((onValue) {
       state = onValue;
     });
   }
 
-  void addClient(Client client) {
-    _repo.addClient(client);
+  Future<void> addClient(Client client) async {
+    // _repo.addClient(client);
+    await _firestoreRepoIns.addClient(client);
     ref.invalidateSelf();
   }
 
   // Delete Client From Client list
   void deleteClient(Client client) async {
-    state.remove(client);
-    await _ins.deleteClient(clientId: client.phoneNumber!);
-    loadData();
+    _firestoreRepoIns.deleteClient(client.phoneNumber!).then((e) {
+      state.remove(client);
+    });
   }
 
   // Delete transaction from transaction list of User
-  void deleteTransaction(Client client, TransactionModel transaction) {
-    client.transactions!.remove(transaction);
-    state = {...state, client};
-    _ins.deleteClientTransaction(
-        clientId: client.phoneNumber!, transactionId: transaction.id!);
+  Future<void> deleteTransaction(
+      Client client, TransactionModel transaction) async {
+    _firestoreRepoIns
+        .deleteClientTransaction(client.phoneNumber!, transaction.id!)
+        .then((e) {
+      client.transactions!.remove(transaction);
+      state = {...state, client};
+    });
   }
 
   // Edite Client info

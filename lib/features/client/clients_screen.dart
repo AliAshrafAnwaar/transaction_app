@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:transaction_app/data/model/client.dart';
 import 'package:transaction_app/features/client/client_transactions.dart';
+import 'package:transaction_app/features/shared/styled_textField.dart';
 import 'package:transaction_app/providers/client_provider.dart';
 
 class ClientsScreen extends ConsumerStatefulWidget {
@@ -69,12 +70,10 @@ class _ClientsScreenState extends ConsumerState<ClientsScreen> {
 
   /// Builds the search bar widget.
   Widget _buildSearchBar() {
-    return TextField(
+    return StyledTextField(
       controller: searchController,
-      decoration: const InputDecoration(
-        labelText: 'ابحث عن عميل',
-        border: OutlineInputBorder(),
-      ),
+      hint: 'ابحث عن عميل',
+      icon: Icons.search,
     );
   }
 

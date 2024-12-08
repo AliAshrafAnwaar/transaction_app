@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 import 'package:transaction_app/data/model/client.dart';
 import 'package:transaction_app/data/model/transaction.dart';
-import 'package:transaction_app/data/services/firestore_services.dart';
 import 'package:transaction_app/features/shared/styled_button.dart';
 import 'package:transaction_app/features/shared/styled_textfield.dart';
 import 'package:transaction_app/providers/client_provider.dart';
@@ -67,9 +66,6 @@ class _HomeState extends ConsumerState<Home> {
           numberTransactions: 5);
 
       ref.read(clientProviderProvider.notifier).addClient(ins);
-
-      FirestoreServices test = FirestoreServices();
-      test.addClient(client: ins);
 
       // Clear the text fields after submission if needed
       nameController.clear();

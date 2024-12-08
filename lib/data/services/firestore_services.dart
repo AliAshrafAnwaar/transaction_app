@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:transaction_app/data/model/client.dart';
 import 'package:transaction_app/data/model/transaction.dart';
 
+// add, edit, delete for both client and transaction
+
 class FirestoreServices {
   final transactions = FirebaseFirestore.instance.collection('Transactions');
   final clients = FirebaseFirestore.instance.collection('Clients');
@@ -22,7 +24,7 @@ class FirestoreServices {
   }
 
   // For adding Transaction and creating client if don't exist
-  Future<void> addClient({required Client client}) async {
+  Future<void> addClient(Client client) async {
     print('add');
     String clientId = client.phoneNumber!;
     TransactionModel transaction =

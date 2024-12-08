@@ -90,11 +90,11 @@ class Chart extends ConsumerWidget {
 
   /// Converts numbers to Arabic numerals.
   String toArabicNumerals(double value) {
-    if (value >= 100000) {
+    if (value >= 10000) {
       // Remove the last three digits and format as "XX ألف"
       final roundedValue =
           (value / 1000).floor(); // Round down to the nearest thousand
-      return '${toArabicNumerals(roundedValue.toDouble())} ألف';
+      return '${toArabicNumerals(roundedValue.toDouble())}';
     }
 
     // Convert the number to Arabic numerals
@@ -142,7 +142,6 @@ class Chart extends ConsumerWidget {
     return BarChart(
       BarChartData(
         barGroups: chartData,
-        groupsSpace: 35,
         alignment: BarChartAlignment.center,
         barTouchData: BarTouchData(
           touchTooltipData: BarTouchTooltipData(
@@ -158,8 +157,8 @@ class Chart extends ConsumerWidget {
 
               return BarTooltipItem(
                 'التاريخ: ${DateFormat('dd/MM/yyyy', 'ar').format(date)}\n'
-                'ايداع: ${toArabicNumerals(deposit)}\n'
-                'سحب: ${toArabicNumerals(withdrawal)}\n',
+                'ايداع: ${toArabicNumerals(deposit)}${(deposit > 10000) ? ' ألف' : ''}\n'
+                'سحب: ${toArabicNumerals(withdrawal)}${(withdrawal > 10000) ? ' ألف' : ''}\n',
                 const TextStyle(color: Colors.white, fontSize: 12),
               );
             },
@@ -171,12 +170,19 @@ class Chart extends ConsumerWidget {
               const AxisTitles(sideTitles: SideTitles(showTitles: false)),
           rightTitles: AxisTitles(
             sideTitles: SideTitles(
+              interval: (averageValue > 0) ? averageValue / 4 : null,
+              reservedSize: 35,
               showTitles: true,
-              reservedSize: 60,
               getTitlesWidget: (value, meta) {
                 // Check if the current value is close to the average value (maxY)
                 if (value == meta.max && value != 0) {
                   return SideTitleWidget(
+                    space: 0,
+                    fitInside: SideTitleFitInsideData(
+                        enabled: true,
+                        axisPosition: 0,
+                        parentAxisSize: 0,
+                        distanceFromEdge: -11),
                     axisSide: meta.axisSide,
                     child: Text(
                       '${toArabicNumerals(value)}+', // Add "+" for max value only
