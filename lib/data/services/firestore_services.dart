@@ -67,7 +67,7 @@ class FirestoreServices {
     final snapshot = await clientDoc.get();
     if (snapshot.exists) {
       // Update client data
-      await clientDoc.set({
+      await clientDoc.update({
         'name': updatedClient.name,
         'phone number': updatedClient.phoneNumber,
       });

@@ -5,7 +5,6 @@ import 'package:transaction_app/core/app_colors.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:transaction_app/features/application.dart';
 import 'firebase_options.dart';
-// apply firebase through the pipeline of firestore -> reg -> provider -> view
 // add edit functionalites for both client details and for client transaction details
 // Take a look about the responsive UI and how to use it
 

@@ -15,7 +15,12 @@ class FirestoreRepo {
     await firestoreIns.addClient(client);
   }
 
-  //edit
+  //EDIT
+  //client
+  Future<void> editClient(String clientid, Client updatedClient) async {
+    await firestoreIns.editClient(
+        clientId: clientid, updatedClient: updatedClient);
+  }
 
   //DELETE
   //client

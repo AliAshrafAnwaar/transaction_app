@@ -49,60 +49,12 @@ class _AdminPageState extends ConsumerState<AdminPage> {
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const SizedBox(
-                height: 30,
-              ),
-              Stack(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.all(8),
-                        child: const Text(
-                          'x ألف',
-                          style: TextStyle(
-                              fontSize: 10, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Row(
-                        children: [
-                          Container(width: 16, height: 16, color: Colors.blue),
-                          const SizedBox(width: 8),
-                          const Text(
-                            'ايداع',
-                            style: TextStyle(fontSize: 10),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(width: 16),
-                      Row(
-                        children: [
-                          Container(
-                              width: 16, height: 16, color: Colors.purple),
-                          const SizedBox(width: 8),
-                          const Text(
-                            'سحب',
-                            style: TextStyle(fontSize: 10),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
-              ),
               const SizedBox(height: 16),
               ConstrainedBox(
                 constraints: BoxConstraints(
-                  maxWidth: (screenWidth > 1000) ? 1000 : screenWidth,
-                  maxHeight: screenHeight > 500 ? 500 : screenHeight,
+                  maxWidth: (screenWidth > 1200) ? 1200 : screenWidth,
+                  maxHeight: screenHeight > 600 ? 600 : screenHeight,
                 ),
                 child: const Chart(),
               ),

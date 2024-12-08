@@ -17,7 +17,9 @@ class Client {
     return Client(
       name: json['name'],
       phoneNumber: json['phoneNumber'],
-      transactions: (json['transactions'] as List<dynamic>)
+      transactions: ((json['transactions'] != null)
+              ? json['transactions'] as List<dynamic>
+              : [])
           .map((dyn) =>
               TransactionModel().fromFirestore(dyn as Map<String, dynamic>))
           .toList(),

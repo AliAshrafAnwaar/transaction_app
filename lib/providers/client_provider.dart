@@ -55,8 +55,19 @@ class ClientProvider extends _$ClientProvider {
 
   // Edite Client info
   void editClient(Client newClient, Client oldClient) {
-    _repo.editClient(newClient, oldClient);
-    ref.invalidateSelf();
+    _firestoreRepoIns.editClient(oldClient.phoneNumber!, newClient).then(
+      (e) {
+        state = state.map(
+          (client) {
+            if (client == oldClient) {
+              client.name = newClient.name;
+              client.phoneNumber = newClient.phoneNumber;
+            }
+            return client;
+          },
+        ).toSet();
+      },
+    );
   }
 
   void editTransaction(Client client, TransactionModel newTransaction,
