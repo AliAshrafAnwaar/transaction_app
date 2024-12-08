@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:transaction_app/core/app_colors.dart';
 import 'package:transaction_app/data/model/client.dart';
 import 'package:transaction_app/data/model/transaction.dart';
 

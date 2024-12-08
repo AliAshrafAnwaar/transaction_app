@@ -1,18 +1,16 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
-import 'package:transaction_app/core/app_colors.dart';
 import 'package:transaction_app/data/model/client.dart';
 import 'package:transaction_app/data/model/transaction.dart';
 import 'package:transaction_app/data/services/firestore_services.dart';
 import 'package:transaction_app/features/shared/styled_button.dart';
-import 'package:transaction_app/features/shared/styled_textField.dart';
+import 'package:transaction_app/features/shared/styled_textfield.dart';
 import 'package:transaction_app/providers/client_provider.dart';
 import 'package:intl/intl.dart';
 
 class Home extends ConsumerStatefulWidget {
   const Home({super.key});
-
   @override
   ConsumerState<Home> createState() => _HomeState();
 }
@@ -83,8 +81,6 @@ class _HomeState extends ConsumerState<Home> {
     }
   }
 
-  String selectedType = 'ايداع';
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -123,11 +119,45 @@ class _HomeState extends ConsumerState<Home> {
                 child: Row(
                   children: [
                     Flexible(
-                      child: StyledTextField(
-                        hint: "نوع العمليه",
-                        icon: Icons.type_specimen,
-                        controller: typeController,
-                        options: const ["ايداع", "سحب"],
+                      child: InkWell(
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                titlePadding: const EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 20),
+                                contentPadding: const EdgeInsets.all(10),
+                                shape: const RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(20))),
+                                title: const Text("اختر نوع العملية"),
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: ["ايداع", "سحب"].map((option) {
+                                    return ListTile(
+                                      title: Text(option),
+                                      onTap: () {
+                                        typeController.text = option;
+                                        Navigator.pop(context);
+                                      },
+                                    );
+                                  }).toList(),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10)),
+                        child: AbsorbPointer(
+                          child: StyledTextField(
+                            hint: "نوع العمليه",
+                            icon: Icons.type_specimen,
+                            controller: typeController,
+                            options: const ["ايداع", "سحب"],
+                          ),
+                        ),
                       ),
                     ),
                     const SizedBox(
@@ -138,8 +168,14 @@ class _HomeState extends ConsumerState<Home> {
                         borderRadius:
                             const BorderRadius.all(Radius.circular(10)),
                         onTap: () async {
-                          dateTime =
-                              await showOmniDateTimePicker(context: context);
+                          dateTime = await showOmniDateTimePicker(
+                            context: context,
+                            constraints:
+                                BoxConstraints(maxHeight: 1000, maxWidth: 500),
+                            is24HourMode: false, // Use 12-hour mode
+                            isShowSeconds: false, // Hide seconds picker
+                            borderRadius: BorderRadius.circular(20),
+                          );
                           final dateFormatter = DateFormat(
                               'dd/MM/yy | h:ma', 'ar'); // Arabic date format
 

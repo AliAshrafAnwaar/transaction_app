@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 import 'package:transaction_app/core/app_colors.dart';
 
 class StyledTextField extends StatefulWidget {
@@ -50,7 +49,7 @@ class _StyledTextFieldState extends State<StyledTextField> {
         context: context,
         builder: (BuildContext context) {
           return SimpleDialog(
-            title: Text('${widget.hint}'),
+            title: Text(widget.hint),
             children: widget.options!.map((option) {
               return SimpleDialogOption(
                 onPressed: () {
@@ -94,7 +93,7 @@ class _StyledTextFieldState extends State<StyledTextField> {
             const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
         labelStyle: Theme.of(context).textTheme.headlineMedium,
         hintStyle: Theme.of(context).textTheme.bodySmall,
-        errorStyle: TextStyle(color: Colors.red),
+        errorStyle: const TextStyle(color: Colors.red),
         prefixIcon: Icon(
           widget.icon,
           color: AppColors.hintColor,

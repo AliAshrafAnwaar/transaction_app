@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:transaction_app/core/app_colors.dart';
 import 'package:transaction_app/data/model/client.dart';
 import 'package:transaction_app/data/model/transaction.dart';
-import 'package:transaction_app/data/services/firestore_services.dart';
 import 'package:transaction_app/features/client/widgets/edit_user_screen.dart';
 import 'package:transaction_app/features/client/widgets/edit_user_transaction_screen.dart';
 import 'package:transaction_app/features/shared/styled_button.dart';

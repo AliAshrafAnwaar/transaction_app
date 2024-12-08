@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:transaction_app/data/model/client.dart';
 import 'package:transaction_app/features/shared/styled_button.dart';
-import 'package:transaction_app/features/shared/styled_textField.dart';
+import 'package:transaction_app/features/shared/styled_textfield.dart';
 import 'package:transaction_app/providers/client_provider.dart';
 
 class EditUserScreen extends ConsumerStatefulWidget {
