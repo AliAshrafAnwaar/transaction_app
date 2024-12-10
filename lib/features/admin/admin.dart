@@ -48,55 +48,133 @@ class _AdminPageState extends ConsumerState<AdminPage> {
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
-          child: Column(
-            children: [
-              const SizedBox(height: 16),
-              ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxWidth: (screenWidth > 1200) ? 1200 : screenWidth,
-                  maxHeight: screenHeight > 600 ? 600 : screenHeight,
-                ),
-                child: const Chart(),
-              ),
-              const SizedBox(height: 20),
-              const Separator(),
-              const SizedBox(height: 20),
-              // Additional settings or widgets can be added here
-              StlyledTextIconButton(
-                onpressed: () {
-                  excelNotifier.exportClientsToExcel(clientProvider);
-                },
-                text: 'اخراج البيانات بصيغه اكسيل',
-                icon: Icons.share_outlined,
-              ),
-              const Separator(),
-              StlyledTextIconButton(
-                onpressed: () {},
-                text: 'الاعدادات',
-                icon: Icons.settings,
-              ),
-              const Separator(),
-              StlyledTextIconButton(
-                onpressed: () {},
-                text: 'تغيير رقم الحمايه',
-                icon: Icons.password,
-              ),
-              const Separator(),
-              StlyledTextIconButton(
-                onpressed: () {
-                  _showMyDialog();
-                },
-                text: 'عن التطبيق',
-                icon: Icons.info_outline,
-              ),
-              const Separator(),
-              StlyledTextIconButton(
-                onpressed: () {},
-                text: 'ابدأ اليوم',
-                icon: Icons.alarm_on,
-              ),
-              const Separator(),
-            ],
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              bool isBig = constraints.maxWidth > 850;
+
+              if (isBig) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 50),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      SizedBox(),
+                      ConstrainedBox(
+                        constraints: BoxConstraints(maxWidth: 300),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            StlyledTextIconButton(
+                              onpressed: () {
+                                excelNotifier
+                                    .exportClientsToExcel(clientProvider);
+                              },
+                              text: 'اخراج البيانات بصيغه اكسيل',
+                              icon: Icons.share_outlined,
+                            ),
+                            Separator(),
+                            StlyledTextIconButton(
+                              onpressed: () {},
+                              text: 'الاعدادات',
+                              icon: Icons.settings,
+                            ),
+                            Separator(),
+                            StlyledTextIconButton(
+                              onpressed: () {},
+                              text: 'تغيير رقم الحمايه',
+                              icon: Icons.password,
+                            ),
+                            Separator(),
+                            StlyledTextIconButton(
+                              onpressed: () {
+                                _showMyDialog();
+                              },
+                              text: 'عن التطبيق',
+                              icon: Icons.info_outline,
+                            ),
+                            Separator(),
+                            StlyledTextIconButton(
+                              onpressed: () {},
+                              text: 'ابدأ اليوم',
+                              icon: Icons.alarm_on,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        width: 1, // Width of the separator
+                        height: 300,
+                        color: Colors.grey, // Color of the separator
+                        margin: EdgeInsets.symmetric(vertical: 10),
+                      ),
+
+                      // Additional settings or widgets can be added here
+                      ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxWidth: (screenWidth > 450) ? 450 : screenWidth,
+                          maxHeight: screenHeight > 350 ? 350 : screenHeight,
+                        ),
+                        child: const Chart(),
+                      ),
+                      SizedBox(),
+                    ],
+                  ),
+                );
+              } else {
+                return Column(
+                  children: [
+                    const SizedBox(height: 50),
+                    ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxWidth: (screenWidth > 600) ? 600 : screenWidth,
+                        maxHeight: screenHeight > 400 ? 400 : screenHeight,
+                      ),
+                      child: const Chart(),
+                    ),
+                    const SizedBox(height: 20),
+                    const Separator(),
+                    const SizedBox(height: 20),
+                    // Additional settings or widgets can be added here
+                    StlyledTextIconButton(
+                      onpressed: () {
+                        excelNotifier.exportClientsToExcel(clientProvider);
+                      },
+                      text: 'اخراج البيانات بصيغه اكسيل',
+                      icon: Icons.share_outlined,
+                    ),
+                    const Separator(),
+                    StlyledTextIconButton(
+                      onpressed: () {},
+                      text: 'الاعدادات',
+                      icon: Icons.settings,
+                    ),
+                    const Separator(),
+                    StlyledTextIconButton(
+                      onpressed: () {},
+                      text: 'تغيير رقم الحمايه',
+                      icon: Icons.password,
+                    ),
+                    const Separator(),
+                    StlyledTextIconButton(
+                      onpressed: () {
+                        _showMyDialog();
+                      },
+                      text: 'عن التطبيق',
+                      icon: Icons.info_outline,
+                    ),
+                    const Separator(),
+                    StlyledTextIconButton(
+                      onpressed: () {},
+                      text: 'ابدأ اليوم',
+                      icon: Icons.alarm_on,
+                    ),
+                    const Separator(),
+                  ],
+                );
+              }
+            },
           ),
         ),
       ),

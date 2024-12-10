@@ -55,6 +55,7 @@ class StlyledTextIconButton extends StatelessWidget {
               Text(
                 text,
                 style: const TextStyle(color: AppColors.primaryText),
+                overflow: TextOverflow.ellipsis,
               ),
               const Expanded(child: const SizedBox()),
               Icon(Icons.arrow_forward_ios, color: Colors.grey)

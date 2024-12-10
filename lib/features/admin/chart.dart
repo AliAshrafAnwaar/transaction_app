@@ -160,12 +160,16 @@ class Chart extends ConsumerWidget {
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
-                  margin: const EdgeInsets.all(8),
+                  margin: EdgeInsets.only(right: 8),
                   child: Text(
                     '${(maxValue > 1000000) ? 'X مليون' : '${(maxValue > 1000) ? 'X ألف' : ''}'}',
-                    style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue),
                   ),
                 ),
               ],
@@ -198,6 +202,7 @@ class Chart extends ConsumerWidget {
             ),
           ],
         ),
+        const SizedBox(height: 30),
         Flexible(
           child: BarChart(
             BarChartData(
