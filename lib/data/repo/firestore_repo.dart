@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:transaction_app/data/model/client.dart';
+import 'package:transaction_app/data/model/transaction.dart';
 import 'package:transaction_app/data/services/firestore_services.dart';
 
 class FirestoreRepo {
@@ -6,8 +8,13 @@ class FirestoreRepo {
   FirestoreServices firestoreIns = FirestoreServices();
 
   //GET Data Only Once
-  Future<Set<Client>> loadData() async {
-    return await firestoreIns.loadData();
+  Future<Set<Client>> loadClients() async {
+    return await firestoreIns.loadClients();
+  }
+
+  //Transactoins
+  Future<Set<TransactionModel>> loadTransactions() async {
+    return await firestoreIns.loadTransactions();
   }
 
   //ADD
@@ -20,6 +27,15 @@ class FirestoreRepo {
   Future<void> editClient(String clientid, Client updatedClient) async {
     await firestoreIns.editClient(
         clientId: clientid, updatedClient: updatedClient);
+  }
+
+//client
+  Future<void> editClientTransaction(String clientid, String transactionId,
+      TransactionModel updatedTransaction) async {
+    await firestoreIns.editClientTransaction(
+        clientId: clientid,
+        transactionId: transactionId,
+        updatedTransaction: updatedTransaction);
   }
 
   //DELETE

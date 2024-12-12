@@ -14,71 +14,106 @@ class ClientsScreen extends ConsumerStatefulWidget {
 
 class _ClientsScreenState extends ConsumerState<ClientsScreen> {
   late TextEditingController searchController;
-  String sortOption = 'name'; // Default sort option
-  List<Client> filteredClients = [];
+  bool _isDisposed = false; // Track if the widget is disposed
 
   @override
   void initState() {
     super.initState();
     searchController = TextEditingController();
-    searchController.addListener(() => setState(() {}));
+
+    // Initialize the controller with the provider's current value.
+    final appBarSearchController =
+        ref.read(clientProviderProvider.notifier).getterSearchController();
+
+    // Add listener to update the provider whenever the text changes.
+    appBarSearchController.addListener(() {
+      if (!_isDisposed) {
+        setState(() {
+          searchController.text = appBarSearchController.text;
+        });
+      }
+    });
+
+    searchController.addListener(() {
+      if (!_isDisposed) {
+        setState(() {});
+      }
+    });
   }
 
   @override
   void dispose() {
+    _isDisposed = true; // Mark as disposed to prevent updates
     searchController.dispose();
     super.dispose();
   }
 
-  /// Filters clients based on the search query.
-  List<Client> filterClients(List<Client> clients) {
-    final query = searchController.text.toLowerCase();
-    return clients.where((client) {
-      return client.name!.toLowerCase().contains(query) ||
-          client.phoneNumber!.contains(query);
-    }).toList();
-  }
-
-  /// Sorts clients based on the selected sort option.
-  void sortClients(List<Client> clients) {
-    if (sortOption == 'name') {
-      clients.sort((a, b) => a.name!.compareTo(b.name!));
-    } else if (sortOption == 'phone') {
-      clients.sort((a, b) => a.phoneNumber!.compareTo(b.phoneNumber!));
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    // Use Consumer to keep searchController in sync with provider's state.
+    ref.listen<String>(
+      clientProviderProvider.notifier
+          .select((notifier) => notifier.getterSearchController().text),
+      (previous, next) {
+        if (searchController.text != next && !_isDisposed) {
+          searchController.text = next; // Sync searchController.
+        }
+      },
+    );
+
     final allClients = ref.watch(clientProviderProvider).toList();
-    filteredClients = filterClients(allClients);
-    sortClients(filteredClients);
+    final filteredClients = _filterAndSortClients(allClients);
 
     return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            _buildSearchBar(),
-            const SizedBox(height: 5),
-            _buildClientList(),
-          ],
-        ),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          bool isWeb = constraints.maxWidth >= 1200;
+
+          if (isWeb) {
+            return Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  _buildClientList(filteredClients),
+                ],
+              ),
+            );
+          } else {
+            return Column(
+              children: [
+                Container(
+                  color: Colors.blue,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: StyledTextField(
+                      hint: 'البحث عن',
+                      isWhite: true,
+                      icon: Icons.person,
+                      controller: searchController,
+                    ),
+                  ),
+                ),
+                _buildClientList(filteredClients),
+              ],
+            );
+          }
+        },
       ),
     );
   }
 
-  /// Builds the search bar widget.
-  Widget _buildSearchBar() {
-    return StyledTextField(
-      controller: searchController,
-      hint: 'ابحث عن عميل',
-      icon: Icons.search,
-    );
+  List<Client> _filterAndSortClients(List<Client> clients) {
+    final query = searchController.text.toLowerCase();
+    final filteredClients = clients.where((client) {
+      return client.name!.toLowerCase().contains(query) ||
+          client.phoneNumber!.contains(query);
+    }).toList();
+
+    filteredClients.sort((a, b) => a.name!.compareTo(b.name!)); // Sort by name
+    return filteredClients;
   }
 
-  /// Builds the list of clients.
-  Widget _buildClientList() {
+  Widget _buildClientList(List<Client> filteredClients) {
     if (filteredClients.isEmpty) {
       return const Expanded(
         child: Center(
@@ -101,7 +136,6 @@ class _ClientsScreenState extends ConsumerState<ClientsScreen> {
     );
   }
 
-  /// Builds a single client tile.
   Widget _buildClientTile(Client client) {
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8),

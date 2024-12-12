@@ -9,13 +9,28 @@ class FirestoreServices {
   final clients = FirebaseFirestore.instance.collection('Clients');
 
   // loading data
-  Future<Set<Client>> loadData() async {
+  Future<Set<Client>> loadClients() async {
     print('load');
     final snapshot = await clients.get();
 
     if (snapshot.docs.isNotEmpty) {
       final data = snapshot.docs
           .map((doc) => Client().fromFirestore(doc.data()))
+          .toSet();
+      return data;
+    } else {
+      return {};
+    }
+  }
+
+  //Load Transactions
+  Future<Set<TransactionModel>> loadTransactions() async {
+    print('load');
+    final snapshot = await transactions.get();
+
+    if (snapshot.docs.isNotEmpty) {
+      final data = snapshot.docs
+          .map((doc) => TransactionModel().fromFirestore(doc.data()))
           .toSet();
       return data;
     } else {
@@ -90,10 +105,20 @@ class FirestoreServices {
     if (snapshot.exists) {
       Client client = Client().fromFirestore(snapshot.data()!);
       final transactions = client.transactions ?? [];
-
-      for (var transaction in transactions) {
-        if (transaction.id == transactionId) {
-        } else {}
+      if (transactions.isNotEmpty) {
+        for (var transaction in transactions) {
+          if (transaction.id == transactionId) {
+            transactions.remove(transaction);
+            transaction = updatedTransaction;
+            transactions.add(transaction);
+            print('object');
+            await clientDoc.update({
+              'transactions': transactions.map((trans) {
+                return trans.toFirestore();
+              })
+            });
+          }
+        }
       }
     }
   }

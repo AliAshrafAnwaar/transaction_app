@@ -74,10 +74,13 @@ class Chart extends ConsumerWidget {
                 cappedDeposit, // Total height (deposit + withdrawal)
             rodStackItems: [
               // Deposit part of the stack
-              BarChartRodStackItem(0, deposit, Colors.blue),
+              BarChartRodStackItem(0, min(deposit, withdrawal),
+                  (deposit < withdrawal) ? Colors.blue : Colors.purple),
               // Withdrawal part stacked above the deposit
               BarChartRodStackItem(
-                  deposit, deposit + withdrawal, Colors.purple),
+                  min(deposit, withdrawal),
+                  withdrawal + deposit,
+                  (deposit > withdrawal) ? Colors.blue : Colors.purple),
             ],
             borderRadius: BorderRadius.circular(5),
           ),
@@ -152,21 +155,25 @@ class Chart extends ConsumerWidget {
     final averageValue = calculateValue(groupedData, counter);
 
     final maxValue = calculateValue(groupedData, counter, max: true);
-    print(maxValue);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Stack(
+          alignment: AlignmentDirectional.center,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
-                  margin: EdgeInsets.only(right: 8),
+                  margin: const EdgeInsets.only(right: 8),
                   child: Text(
-                    '${(maxValue > 1000000) ? 'X مليون' : '${(maxValue > 1000) ? 'X ألف' : ''}'}',
-                    style: TextStyle(
+                    (averageValue > 1000000)
+                        ? 'X مليون'
+                        : (averageValue > 1000)
+                            ? 'X ألف'
+                            : '',
+                    style: const TextStyle(
                         fontSize: 10,
                         fontWeight: FontWeight.bold,
                         color: Colors.blue),
@@ -200,6 +207,29 @@ class Chart extends ConsumerWidget {
                 ),
               ],
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                DropdownButton(
+                  padding: const EdgeInsets.all(0),
+                  alignment: Alignment.center,
+                  isDense: false, // Reduces internal padding
+                  focusColor: Colors.transparent,
+                  hint: const Text('7 ايام'),
+                  items: [],
+                  onChanged: (e) {},
+                  dropdownColor: Colors.white,
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  underline:
+                      const SizedBox(), // Removed default underline for a cleaner look
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ],
+            ),
           ],
         ),
         const SizedBox(height: 30),
@@ -220,11 +250,13 @@ class Chart extends ConsumerWidget {
                     final groupedDataForDate = groupedData[date]!;
                     final deposit = groupedDataForDate['ايداع']!;
                     final withdrawal = groupedDataForDate['سحب']!;
-
+                    print(deposit);
+                    print(withdrawal);
+                    print('------------------------------------------');
                     return BarTooltipItem(
                       'التاريخ: ${DateFormat('dd/MM/yyyy', 'ar').format(date)}\n'
                       'ايداع: ${toArabicNumerals(deposit)}${(deposit > 1000000) ? ' مليون' : '${(deposit > 1000) ? ' ألف' : ''}'}\n'
-                      'سحب: ${toArabicNumerals(withdrawal)}${(withdrawal > 1000000) ? ' مليون' : '${(deposit > 1000) ? ' ألف' : ''}'}\n',
+                      'سحب: ${toArabicNumerals(withdrawal)}${(withdrawal > 1000000) ? ' مليون' : '${(withdrawal > 1000) ? ' ألف' : ''}'}\n',
                       const TextStyle(color: Colors.white, fontSize: 12),
                     );
                   },
@@ -244,7 +276,7 @@ class Chart extends ConsumerWidget {
                       if (value == meta.max && value != 0) {
                         return SideTitleWidget(
                           space: 0,
-                          fitInside: SideTitleFitInsideData(
+                          fitInside: const SideTitleFitInsideData(
                               enabled: true,
                               axisPosition: 0,
                               parentAxisSize: 0,

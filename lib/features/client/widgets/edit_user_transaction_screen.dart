@@ -56,8 +56,9 @@ class _EditUserTransactionScreenState
       TransactionModel transaction = TransactionModel(
           amount: double.parse(_amountController.text),
           payMethod: _payMethodController.text,
+          id: widget.transaction.id,
           type: _typeController.text,
-          time: DateTime.now(),
+          time: widget.transaction.time,
           phoneNumber: widget.client.phoneNumber!);
       ref
           .read(clientProviderProvider.notifier)

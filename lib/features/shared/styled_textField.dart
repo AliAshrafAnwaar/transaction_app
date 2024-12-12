@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:transaction_app/core/app_colors.dart';
+import 'package:transaction_app/providers/client_provider.dart';
 
-class StyledTextField extends StatefulWidget {
+class StyledTextField extends ConsumerStatefulWidget {
   const StyledTextField(
       {required this.hint,
       required this.icon,
@@ -9,22 +11,26 @@ class StyledTextField extends StatefulWidget {
       this.controller,
       this.timeCheck,
       this.password,
+      this.isWhite,
+      this.isNotifier,
       this.options,
       super.key});
 
   final String hint;
   final IconData icon;
   final bool? isPassword;
+  final bool? isNotifier;
   final TextEditingController? controller;
   final TextEditingController? password;
   final bool? timeCheck;
+  final bool? isWhite;
   final List<String>? options; // List of options for selection
 
   @override
-  State<StyledTextField> createState() => _StyledTextFieldState();
+  ConsumerState<StyledTextField> createState() => _StyledTextFieldState();
 }
 
-class _StyledTextFieldState extends State<StyledTextField> {
+class _StyledTextFieldState extends ConsumerState<StyledTextField> {
   bool? isPasswordChecker;
 
   final _formKey = GlobalKey<FormState>();
@@ -70,7 +76,17 @@ class _StyledTextFieldState extends State<StyledTextField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      style: Theme.of(context).textTheme.bodyMedium,
+      onChanged: (widget.isNotifier == true)
+          ? (e) {
+              ref
+                  .read(clientProviderProvider.notifier)
+                  .setterSearchController(widget.controller!);
+            }
+          : null,
+      cursorColor: (widget.isWhite == true) ? Colors.white : null,
+      style: (widget.isWhite == true)
+          ? TextStyle(color: Colors.white)
+          : Theme.of(context).textTheme.bodyMedium,
       controller: widget.controller,
       readOnly: widget.options != null ||
           widget.timeCheck == true, // Make it read-only if options are provided
@@ -79,7 +95,7 @@ class _StyledTextFieldState extends State<StyledTextField> {
           return 'برجاء ادخال ${widget.hint}';
         } else if (value.length < 3 && widget.hint == "الاسم") {
           return 'برجاء ادخال علي الاقل 3 في ${widget.hint}';
-        } else if (value.length < 10 && widget.hint == "رقم الهاتف") {
+        } else if (value.length != 11 && widget.hint == "رقم الهاتف") {
           return '${widget.hint} غير صحيح ';
         } else if (value.contains("+") && widget.hint == "رقم الهاتف") {
           return '${widget.hint} يبدأ ب 01';
@@ -88,35 +104,47 @@ class _StyledTextFieldState extends State<StyledTextField> {
       },
       obscureText: isPasswordChecker!,
       decoration: InputDecoration(
+        isDense: (widget.isWhite == true) ? true : false,
         hintText: widget.hint,
-        contentPadding:
-            const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
-        labelStyle: Theme.of(context).textTheme.headlineMedium,
-        hintStyle: Theme.of(context).textTheme.bodySmall,
+        contentPadding: (widget.isWhite == true)
+            ? EdgeInsets.all(0)
+            : const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+        labelStyle: (widget.isWhite == true)
+            ? TextStyle(color: Colors.white)
+            : Theme.of(context).textTheme.headlineMedium,
+        hintStyle: (widget.isWhite == true)
+            ? TextStyle(color: Colors.white.withOpacity(0.5))
+            : Theme.of(context).textTheme.bodySmall,
         errorStyle: const TextStyle(color: Colors.red),
         prefixIcon: Icon(
           widget.icon,
-          color: AppColors.hintColor,
+          color: (widget.isWhite == true) ? Colors.white : AppColors.hintColor,
           size: 20,
         ),
         enabledBorder: OutlineInputBorder(
+          gapPadding: 0,
           borderRadius: BorderRadius.circular(10.0),
-          borderSide: const BorderSide(
-            color: AppColors.hintColor,
+          borderSide: BorderSide(
+            color:
+                (widget.isWhite == true) ? Colors.white : AppColors.hintColor,
             width: 1,
           ),
         ),
         border: OutlineInputBorder(
+          gapPadding: 0,
           borderRadius: BorderRadius.circular(10.0),
-          borderSide: const BorderSide(
-            color: AppColors.hintColor,
+          borderSide: BorderSide(
+            color:
+                (widget.isWhite == true) ? Colors.white : AppColors.hintColor,
           ),
         ),
-        focusColor: AppColors.primaryText,
+        focusColor:
+            (widget.isWhite == true) ? Colors.white : AppColors.primaryText,
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.0),
-          borderSide: const BorderSide(
-            color: AppColors.primaryText,
+          borderSide: BorderSide(
+            color:
+                (widget.isWhite == true) ? Colors.white : AppColors.primaryText,
             width: 1,
           ),
         ),
@@ -138,7 +166,9 @@ class _StyledTextFieldState extends State<StyledTextField> {
             ? IconButton(
                 icon: Icon(
                   isPasswordChecker! ? Icons.visibility : Icons.visibility_off,
-                  color: AppColors.hintColor,
+                  color: (widget.isWhite == true)
+                      ? Colors.white
+                      : AppColors.hintColor,
                   size: 20,
                 ),
                 onPressed: () {

@@ -80,145 +80,178 @@ class _HomeState extends ConsumerState<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "تسجيل العمليه",
-          style: TextStyle(color: Color.fromARGB(255, 54, 54, 54)),
-        ),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Form(
-          key: _formKey, // Wrap the inputs in a Form widget
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: StyledTextField(
-                  hint: "الاسم",
-                  icon: Icons.person,
-                  controller: nameController,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: StyledTextField(
-                  hint: "رقم الهاتف",
-                  icon: Icons.phone,
-                  controller: phoneController,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Row(
-                  children: [
-                    Flexible(
-                      child: InkWell(
-                        onTap: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                titlePadding: const EdgeInsets.symmetric(
-                                    vertical: 10, horizontal: 20),
-                                contentPadding: const EdgeInsets.all(10),
-                                shape: const RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20))),
-                                title: const Text("اختر نوع العملية"),
-                                content: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: ["ايداع", "سحب"].map((option) {
-                                    return ListTile(
-                                      title: Text(option),
-                                      onTap: () {
-                                        typeController.text = option;
-                                        Navigator.pop(context);
-                                      },
-                                    );
-                                  }).toList(),
-                                ),
+      body: Center(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Form(
+            key: _formKey, // Wrap the inputs in a Form widget
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 700),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: StyledTextField(
+                      hint: "الاسم",
+                      icon: Icons.person,
+                      controller: nameController,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: StyledTextField(
+                      hint: "رقم الهاتف",
+                      icon: Icons.phone,
+                      controller: phoneController,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Row(
+                      children: [
+                        Flexible(
+                          child: InkWell(
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    titlePadding: const EdgeInsets.symmetric(
+                                        vertical: 10, horizontal: 20),
+                                    contentPadding: const EdgeInsets.all(10),
+                                    shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(20))),
+                                    title: const Text("اختر نوع العملية"),
+                                    content: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: ["ايداع", "سحب"].map((option) {
+                                        return ListTile(
+                                          title: Text(option),
+                                          onTap: () {
+                                            typeController.text = option;
+                                            Navigator.pop(context);
+                                          },
+                                        );
+                                      }).toList(),
+                                    ),
+                                  );
+                                },
                               );
                             },
-                          );
-                        },
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(10)),
-                        child: AbsorbPointer(
-                          child: StyledTextField(
-                            hint: "نوع العمليه",
-                            icon: Icons.type_specimen,
-                            controller: typeController,
-                            options: const ["ايداع", "سحب"],
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10)),
+                            child: AbsorbPointer(
+                              child: StyledTextField(
+                                hint: "نوع العمليه",
+                                icon: Icons.type_specimen,
+                                controller: typeController,
+                                options: const ["ايداع", "سحب"],
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 15,
-                    ),
-                    Flexible(
-                      child: InkWell(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(10)),
-                        onTap: () async {
-                          dateTime = await showOmniDateTimePicker(
-                            context: context,
-                            constraints:
-                                BoxConstraints(maxHeight: 1000, maxWidth: 500),
-                            is24HourMode: false, // Use 12-hour mode
-                            isShowSeconds: false, // Hide seconds picker
-                            borderRadius: BorderRadius.circular(20),
-                          );
-                          final dateFormatter = DateFormat(
-                              'dd/MM/yy | h:ma', 'ar'); // Arabic date format
+                        const SizedBox(
+                          width: 15,
+                        ),
+                        Flexible(
+                          child: InkWell(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10)),
+                            onTap: () async {
+                              dateTime = await showOmniDateTimePicker(
+                                context: context,
+                                constraints: BoxConstraints(
+                                    maxHeight: 1000, maxWidth: 500),
+                                is24HourMode: false, // Use 12-hour mode
+                                isShowSeconds: false, // Hide seconds picker
+                                borderRadius: BorderRadius.circular(20),
+                              );
+                              final dateFormatter = DateFormat(
+                                  'dd/MM/yy | h:ma',
+                                  'ar'); // Arabic date format
 
-                          // Use dateTime here
-                          if (dateTime != null) {
-                            final arabicDate = dateFormatter.format(dateTime!);
-                            dateController.text = arabicDate;
-                          }
-                        },
-                        child: AbsorbPointer(
-                          child: StyledTextField(
-                            hint: 'التاريخ',
-                            icon: Icons.timelapse,
-                            timeCheck: true,
-                            controller: dateController,
+                              // Use dateTime here
+                              if (dateTime != null) {
+                                final arabicDate =
+                                    dateFormatter.format(dateTime!);
+                                dateController.text = arabicDate;
+                              }
+                            },
+                            child: AbsorbPointer(
+                              child: StyledTextField(
+                                hint: 'التاريخ',
+                                icon: Icons.timelapse,
+                                timeCheck: true,
+                                controller: dateController,
+                              ),
+                            ),
                           ),
                         ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: StyledTextField(
+                      hint: "المبلغ",
+                      icon: Icons.money,
+                      controller: amountController,
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            titlePadding: const EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 20),
+                            contentPadding: const EdgeInsets.all(10),
+                            shape: const RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20))),
+                            title: const Text("طريقه الدفع"),
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: ["محفظه", "كاش", "تحويل بنكي", "فيزا"]
+                                  .map((option) {
+                                return ListTile(
+                                  title: Text(option),
+                                  onTap: () {
+                                    paymentMethodController.text = option;
+                                    Navigator.pop(context);
+                                  },
+                                );
+                              }).toList(),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    child: AbsorbPointer(
+                      child: StyledTextField(
+                        hint: "طريقه الدفع",
+                        icon: Icons.type_specimen,
+                        controller: paymentMethodController,
+                        options: const ["محفظه", "كاش", "تحويل بنكي", "فيزا"],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(height: 30),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: StyledButton(
+                      onPressed: onSubmit, // Call the submit function
+                      text: "تسجيل العمليه",
+                    ),
+                  ),
+                ],
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: StyledTextField(
-                  hint: "المبلغ",
-                  icon: Icons.money,
-                  controller: amountController,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: StyledTextField(
-                  hint: "طريقه الدفع",
-                  icon: Icons.directions,
-                  controller: paymentMethodController,
-                ),
-              ),
-              const SizedBox(height: 30),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: StyledButton(
-                  onPressed: onSubmit, // Call the submit function
-                  text: "تسجيل العمليه",
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ),

@@ -1,14 +1,13 @@
+import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:transaction_app/data/model/client.dart';
 import 'package:transaction_app/data/model/transaction.dart';
-import 'package:transaction_app/data/repo/client_repo.dart';
 import 'package:transaction_app/data/repo/firestore_repo.dart';
 
 part 'client_provider.g.dart';
 
 @riverpod
 class ClientProvider extends _$ClientProvider {
-  final ClientRepo _repo = ClientRepo();
   final FirestoreRepo _firestoreRepoIns = FirestoreRepo();
   bool _singleUse = true;
 
@@ -16,15 +15,15 @@ class ClientProvider extends _$ClientProvider {
   Set<Client> build() {
     //one time gaining the data
     if (_singleUse) {
-      loadData();
+      loadClients();
       _singleUse = true;
     }
     ref.keepAlive();
     return {};
   }
 
-  void loadData() {
-    _firestoreRepoIns.loadData().then((onValue) {
+  void loadClients() {
+    _firestoreRepoIns.loadClients().then((onValue) {
       state = onValue;
     });
   }
@@ -71,8 +70,30 @@ class ClientProvider extends _$ClientProvider {
   }
 
   void editTransaction(Client client, TransactionModel newTransaction,
-      TransactionModel oldTransaction) {
-    _repo.editTransaction(client, newTransaction, oldTransaction);
-    ref.invalidateSelf();
+      TransactionModel oldTransaction) async {
+    await _firestoreRepoIns
+        .editClientTransaction(
+            client.phoneNumber!, oldTransaction.id!, newTransaction)
+        .then((value) {
+      state = state.map(
+        (c) {
+          if (c == client) {
+            c.transactions!.remove(oldTransaction);
+            c.transactions!.add(newTransaction);
+          }
+          return c;
+        },
+      ).toSet();
+    });
+  }
+
+  final TextEditingController _getterSearchController = TextEditingController();
+
+  void setterSearchController(TextEditingController search) {
+    _getterSearchController.text = search.text;
+  }
+
+  TextEditingController getterSearchController() {
+    return _getterSearchController;
   }
 }

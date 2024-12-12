@@ -47,19 +47,17 @@ class _AdminPageState extends ConsumerState<AdminPage> {
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              bool isBig = constraints.maxWidth > 850;
+        child: Center(
+          child: SingleChildScrollView(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                bool isBig = constraints.maxWidth > 850;
 
-              if (isBig) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 50),
-                  child: Row(
+                if (isBig) {
+                  return Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      SizedBox(),
                       ConstrainedBox(
                         constraints: BoxConstraints(maxWidth: 300),
                         child: Column(
@@ -118,63 +116,62 @@ class _AdminPageState extends ConsumerState<AdminPage> {
                         ),
                         child: const Chart(),
                       ),
-                      SizedBox(),
                     ],
-                  ),
-                );
-              } else {
-                return Column(
-                  children: [
-                    const SizedBox(height: 50),
-                    ConstrainedBox(
-                      constraints: BoxConstraints(
-                        maxWidth: (screenWidth > 600) ? 600 : screenWidth,
-                        maxHeight: screenHeight > 400 ? 400 : screenHeight,
+                  );
+                } else {
+                  return Column(
+                    children: [
+                      const SizedBox(height: 50),
+                      ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxWidth: (screenWidth > 600) ? 600 : screenWidth,
+                          maxHeight: screenHeight > 400 ? 400 : screenHeight,
+                        ),
+                        child: const Chart(),
                       ),
-                      child: const Chart(),
-                    ),
-                    const SizedBox(height: 20),
-                    const Separator(),
-                    const SizedBox(height: 20),
-                    // Additional settings or widgets can be added here
-                    StlyledTextIconButton(
-                      onpressed: () {
-                        excelNotifier.exportClientsToExcel(clientProvider);
-                      },
-                      text: 'اخراج البيانات بصيغه اكسيل',
-                      icon: Icons.share_outlined,
-                    ),
-                    const Separator(),
-                    StlyledTextIconButton(
-                      onpressed: () {},
-                      text: 'الاعدادات',
-                      icon: Icons.settings,
-                    ),
-                    const Separator(),
-                    StlyledTextIconButton(
-                      onpressed: () {},
-                      text: 'تغيير رقم الحمايه',
-                      icon: Icons.password,
-                    ),
-                    const Separator(),
-                    StlyledTextIconButton(
-                      onpressed: () {
-                        _showMyDialog();
-                      },
-                      text: 'عن التطبيق',
-                      icon: Icons.info_outline,
-                    ),
-                    const Separator(),
-                    StlyledTextIconButton(
-                      onpressed: () {},
-                      text: 'ابدأ اليوم',
-                      icon: Icons.alarm_on,
-                    ),
-                    const Separator(),
-                  ],
-                );
-              }
-            },
+                      const SizedBox(height: 20),
+                      const Separator(),
+                      const SizedBox(height: 20),
+                      // Additional settings or widgets can be added here
+                      StlyledTextIconButton(
+                        onpressed: () {
+                          excelNotifier.exportClientsToExcel(clientProvider);
+                        },
+                        text: 'اخراج البيانات بصيغه اكسيل',
+                        icon: Icons.share_outlined,
+                      ),
+                      const Separator(),
+                      StlyledTextIconButton(
+                        onpressed: () {},
+                        text: 'الاعدادات',
+                        icon: Icons.settings,
+                      ),
+                      const Separator(),
+                      StlyledTextIconButton(
+                        onpressed: () {},
+                        text: 'تغيير رقم الحمايه',
+                        icon: Icons.password,
+                      ),
+                      const Separator(),
+                      StlyledTextIconButton(
+                        onpressed: () {
+                          _showMyDialog();
+                        },
+                        text: 'عن التطبيق',
+                        icon: Icons.info_outline,
+                      ),
+                      const Separator(),
+                      StlyledTextIconButton(
+                        onpressed: () {},
+                        text: 'ابدأ اليوم',
+                        icon: Icons.alarm_on,
+                      ),
+                      const Separator(),
+                    ],
+                  );
+                }
+              },
+            ),
           ),
         ),
       ),

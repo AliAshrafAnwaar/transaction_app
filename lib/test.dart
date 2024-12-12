@@ -1,82 +1,68 @@
 import 'package:flutter/material.dart';
 
-class ResponsiveUI extends StatelessWidget {
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // Use LayoutBuilder for screen size adaptability
-    return Scaffold(
-      appBar: AppBar(title: Text('Responsive UI Example')),
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          // Determine the screen size
-          bool isWideScreen = constraints.maxWidth > 1000;
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: HomePage(),
+    );
+  }
+}
 
-          if (isWideScreen) {
-            // For wider screens, display the container and list side by side
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.start,
+class HomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            // Logo or App Name
+            Text(
+              'MyApp',
+              style: TextStyle(color: Colors.white),
+            ),
+
+            // Navigation Links
+            Row(
               children: [
-                Flexible(
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: 200),
-                    child: SizedBox(),
+                TextButton(
+                  onPressed: () {}, // Navigate to Home
+                  child: Text(
+                    'Home',
+                    style: TextStyle(color: Colors.white),
                   ),
                 ),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: 20,
-                    itemBuilder: (context, index) => ListTile(
-                      title: Text('List Item $index'),
-                    ),
+                TextButton(
+                  onPressed: () {}, // Navigate to Features
+                  child: Text(
+                    'Features',
+                    style: TextStyle(color: Colors.white),
                   ),
                 ),
-                Container(
-                  width: 600, // Fixed width for the container
-                  height: 400, // Fixed height for the container
-                  color: Colors.blue,
-                  child: Center(
-                    child: Text(
-                      'Container',
-                      style: TextStyle(color: Colors.white, fontSize: 24),
-                    ),
+                TextButton(
+                  onPressed: () {}, // Navigate to About
+                  child: Text(
+                    'About',
+                    style: TextStyle(color: Colors.white),
                   ),
                 ),
-                Flexible(
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: 200),
-                    child: SizedBox(),
+                TextButton(
+                  onPressed: () {}, // Navigate to Contact
+                  child: Text(
+                    'Contact',
+                    style: TextStyle(color: Colors.white),
                   ),
                 ),
               ],
-            );
-          } else {
-            // For smaller screens, display the container above the list
-            return Column(
-              children: [
-                Container(
-                  width: double.infinity, // Full width for small screens
-                  height: 400,
-                  color: Colors.blue,
-                  child: Center(
-                    child: Text(
-                      'Container',
-                      style: TextStyle(color: Colors.white, fontSize: 24),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: 20,
-                    itemBuilder: (context, index) => ListTile(
-                      title: Text('List Item $index'),
-                    ),
-                  ),
-                ),
-              ],
-            );
-          }
-        },
+            ),
+          ],
+        ),
+        backgroundColor: Colors.blue,
+      ),
+      body: Center(
+        child: Text('Welcome to MyApp!'),
       ),
     );
   }
