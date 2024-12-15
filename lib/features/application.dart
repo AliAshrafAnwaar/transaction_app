@@ -6,7 +6,6 @@ import 'package:transaction_app/features/shared/styled_textField.dart';
 import 'package:transaction_app/features/transaction/all_transactions.dart';
 import 'package:transaction_app/features/client/clients_screen.dart';
 import 'package:transaction_app/features/home/home.dart';
-import 'package:transaction_app/providers/client_provider.dart';
 
 class Application extends ConsumerStatefulWidget {
   const Application({super.key});

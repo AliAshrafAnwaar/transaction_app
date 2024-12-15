@@ -116,6 +116,7 @@ class _AdminPageState extends ConsumerState<AdminPage> {
                         ),
                         child: const Chart(),
                       ),
+                      SizedBox(),
                     ],
                   );
                 } else {

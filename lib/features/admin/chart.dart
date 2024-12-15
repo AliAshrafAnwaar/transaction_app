@@ -1,6 +1,4 @@
 import 'dart:math';
-
-import 'package:excel/excel.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -154,7 +152,6 @@ class Chart extends ConsumerWidget {
     // Calculate average value for chart max
     final averageValue = calculateValue(groupedData, counter);
 
-    final maxValue = calculateValue(groupedData, counter, max: true);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
