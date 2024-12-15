@@ -16,6 +16,8 @@ class _ClientsScreenState extends ConsumerState<ClientsScreen> {
   late TextEditingController searchController;
   bool _isDisposed = false; // Track if the widget is disposed
 
+  bool isloading = false;
+
   @override
   void initState() {
     super.initState();
@@ -64,42 +66,61 @@ class _ClientsScreenState extends ConsumerState<ClientsScreen> {
     final allClients = ref.watch(clientProviderProvider).toList();
     final filteredClients = _filterAndSortClients(allClients);
 
-    return SafeArea(
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          bool isWeb = constraints.maxWidth > 1024;
+    if (isloading == false && allClients.isEmpty) {
+      ref.read(clientProviderProvider.notifier).loadClients().whenComplete(() {
+        setState(() {
+          isloading = true;
+        });
+      });
+    }
 
-          if (isWeb) {
-            return Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  _buildClientList(filteredClients),
-                ],
-              ),
-            );
-          } else {
-            return Column(
-              children: [
-                Container(
-                  color: Colors.blue,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: StyledTextField(
-                      hint: 'البحث عن',
-                      isWhite: true,
-                      icon: Icons.person,
-                      controller: searchController,
-                    ),
-                  ),
+    return (isloading || allClients.isNotEmpty)
+        ? (ref.watch(clientProviderProvider).isEmpty)
+            ? const Center(
+                child: Text(
+                  'يوجد مشكله بالاتصال',
+                  style: TextStyle(fontSize: 16, color: Colors.grey),
                 ),
-                _buildClientList(filteredClients),
-              ],
-            );
-          }
-        },
-      ),
-    );
+              )
+            : SafeArea(
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    bool isWeb = constraints.maxWidth > 1024;
+
+                    if (isWeb) {
+                      return Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          children: [
+                            _buildClientList(filteredClients),
+                          ],
+                        ),
+                      );
+                    } else {
+                      return Column(
+                        children: [
+                          Container(
+                            color: Colors.blue,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: StyledTextField(
+                                hint: 'البحث عن',
+                                isWhite: true,
+                                icon: Icons.person,
+                                controller: searchController,
+                              ),
+                            ),
+                          ),
+                          _buildClientList(filteredClients),
+                        ],
+                      );
+                    }
+                  },
+                ),
+              )
+        : const Center(
+            child: CircularProgressIndicator(),
+          );
   }
 
   List<Client> _filterAndSortClients(List<Client> clients) {

@@ -17,6 +17,7 @@ class _AllTransactionsState extends ConsumerState<AllTransactions> {
   List<TransactionModel> filteredTransactions = [];
   String sortOption = 'date';
   bool _isDisposed = false;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -85,29 +86,46 @@ class _AllTransactionsState extends ConsumerState<AllTransactions> {
     if (searchController.text.isEmpty && filteredTransactions.isEmpty) {
       setState(() => filteredTransactions = allTransactions);
     }
+    if (isLoading == false && allTransactions.isEmpty) {
+      ref
+          .read(allTransactionsProviderProvider.notifier)
+          .loadTransactions()
+          .then(
+        (value) {
+          print('object');
+          setState(() {
+            isLoading = true;
+          });
+        },
+      );
+    }
 
-    return SafeArea(
-      child: Column(
-        children: [
-          LayoutBuilder(
-            builder: (context, constraints) {
-              bool isWeb = constraints.maxWidth > 1024;
+    return (isLoading = false || allTransactions.isEmpty)
+        ? const Center(
+            child: CircularProgressIndicator(),
+          )
+        : SafeArea(
+            child: Column(
+              children: [
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    bool isWeb = constraints.maxWidth > 1024;
 
-              if (isWeb) {
-                return const SizedBox();
-              } else {
-                return Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: _buildSearchAndSortBar(),
-                );
-              }
-            },
-          ),
-          const SizedBox(height: 10),
-          _buildTransactionList(),
-        ],
-      ),
-    );
+                    if (isWeb) {
+                      return const SizedBox();
+                    } else {
+                      return Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: _buildSearchAndSortBar(),
+                      );
+                    }
+                  },
+                ),
+                const SizedBox(height: 10),
+                _buildTransactionList(),
+              ],
+            ),
+          );
   }
 
   Widget _buildSearchAndSortBar() {

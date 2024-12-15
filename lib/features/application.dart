@@ -78,7 +78,7 @@ class ApplicationState extends ConsumerState<Application> {
                     children: [
                       TextButton(
                         onPressed: () {
-                          title = 'المنزل | تسجيل العمليه';
+                          title = 'المنزل';
                           _onItemTapped(0);
                         }, // Navigate to Home
                         child: const Text(

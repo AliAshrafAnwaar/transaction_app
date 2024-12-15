@@ -10,12 +10,13 @@ class StyledTextField extends ConsumerStatefulWidget {
       this.isPassword,
       this.controller,
       this.timeCheck,
+      this.readonly,
       this.password,
       this.isWhite,
       this.isNotifier,
-      this.options,
       super.key});
 
+  final bool? readonly;
   final String hint;
   final IconData icon;
   final bool? isPassword;
@@ -24,7 +25,6 @@ class StyledTextField extends ConsumerStatefulWidget {
   final TextEditingController? password;
   final bool? timeCheck;
   final bool? isWhite;
-  final List<String>? options; // List of options for selection
 
   @override
   ConsumerState<StyledTextField> createState() => _StyledTextFieldState();
@@ -48,31 +48,6 @@ class _StyledTextFieldState extends ConsumerState<StyledTextField> {
         isPasswordChecker ?? (widget.isPassword == true ? true : false);
   }
 
-  // Function to show options dialog
-  void _showOptionsDialog() {
-    if (widget.options != null && widget.options!.isNotEmpty) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return SimpleDialog(
-            title: Text(widget.hint),
-            children: widget.options!.map((option) {
-              return SimpleDialogOption(
-                onPressed: () {
-                  setState(() {
-                    widget.controller?.text = option;
-                  });
-                  Navigator.pop(context);
-                },
-                child: Text(option),
-              );
-            }).toList(),
-          );
-        },
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return TextFormField(
@@ -88,8 +63,6 @@ class _StyledTextFieldState extends ConsumerState<StyledTextField> {
           ? TextStyle(color: Colors.white)
           : Theme.of(context).textTheme.bodyMedium,
       controller: widget.controller,
-      readOnly: widget.options != null ||
-          widget.timeCheck == true, // Make it read-only if options are provided
       validator: (value) {
         if (value == null || value.isEmpty) {
           return 'برجاء ادخال ${widget.hint}';
@@ -102,6 +75,7 @@ class _StyledTextFieldState extends ConsumerState<StyledTextField> {
         }
         return null;
       },
+      readOnly: widget.readonly ?? false,
       obscureText: isPasswordChecker!,
       decoration: InputDecoration(
         isDense: (widget.isWhite == true) ? true : false,
@@ -178,9 +152,6 @@ class _StyledTextFieldState extends ConsumerState<StyledTextField> {
                 })
             : const SizedBox(),
       ),
-      onTap: widget.options != null
-          ? _showOptionsDialog
-          : null, // Show dialog on tap
     );
   }
 }

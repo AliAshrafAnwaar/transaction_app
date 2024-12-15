@@ -6,26 +6,36 @@ import 'package:transaction_app/data/repo/firestore_repo.dart';
 
 part 'client_provider.g.dart';
 
+class ClientState {
+  final bool isLoading;
+  final Set<Client> clients;
+
+  const ClientState({
+    this.isLoading = false,
+    this.clients = const {},
+  });
+
+  ClientState copyWith({bool? isLoading, Set<Client>? clients}) {
+    return ClientState(
+      isLoading: isLoading ?? this.isLoading,
+      clients: clients ?? this.clients,
+    );
+  }
+}
+
 @riverpod
 class ClientProvider extends _$ClientProvider {
   final FirestoreRepo _firestoreRepoIns = FirestoreRepo();
-  bool _singleUse = true;
 
   @override
   Set<Client> build() {
-    //one time gaining the data
-    if (_singleUse) {
-      loadClients();
-      _singleUse = true;
-    }
     ref.keepAlive();
     return {};
   }
 
-  void loadClients() {
-    _firestoreRepoIns.loadClients().then((onValue) {
-      state = onValue;
-    });
+  Future<bool> loadClients() async {
+    state = await _firestoreRepoIns.loadClients();
+    return true;
   }
 
   Future<void> addClient(Client client) async {
