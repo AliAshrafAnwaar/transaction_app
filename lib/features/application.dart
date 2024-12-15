@@ -45,7 +45,7 @@ class ApplicationState extends ConsumerState<Application> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        bool isWeb = constraints.maxWidth > 1200;
+        bool isWeb = constraints.maxWidth > 1024;
 
         if (isWeb) {
           return Scaffold(

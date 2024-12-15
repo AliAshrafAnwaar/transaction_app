@@ -51,8 +51,8 @@ class _AdminPageState extends ConsumerState<AdminPage> {
           child: SingleChildScrollView(
             child: LayoutBuilder(
               builder: (context, constraints) {
-                bool isBig = constraints.maxWidth > 850;
-
+                final screenWidth = MediaQuery.of(context).size.width;
+                bool isBig = screenWidth > 800;
                 if (isBig) {
                   return Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -121,12 +121,12 @@ class _AdminPageState extends ConsumerState<AdminPage> {
                   );
                 } else {
                   return Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 50),
                       ConstrainedBox(
                         constraints: BoxConstraints(
                           maxWidth: (screenWidth > 600) ? 600 : screenWidth,
-                          maxHeight: screenHeight > 400 ? 400 : screenHeight,
+                          maxHeight: screenWidth > 400 ? 300 : screenWidth,
                         ),
                         child: const Chart(),
                       ),

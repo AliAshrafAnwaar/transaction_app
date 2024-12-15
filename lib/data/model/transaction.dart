@@ -18,12 +18,13 @@ class TransactionModel {
 
   TransactionModel fromFirestore(Map<String, dynamic> json) {
     return TransactionModel(
-        id: json['id'] as String,
-        amount: json['amount'] as double,
-        payMethod: json['payMethod'] as String,
-        type: json['type'] as String,
-        phoneNumber: json['phoneNumber'] as String,
-        time: (json['time'] as Timestamp).toDate());
+      id: json['id'] as String,
+      amount: (json['amount'] as num).toDouble(), // Fix here
+      payMethod: json['payMethod'] as String,
+      type: json['type'] as String,
+      phoneNumber: json['phoneNumber'] as String,
+      time: (json['time'] as Timestamp).toDate(),
+    );
   }
 
   Map<String, dynamic> toFirestore() {

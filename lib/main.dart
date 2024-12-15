@@ -22,7 +22,7 @@ void main() async {
             theme: AppTheme.lightTheme,
             localizationsDelegates: GlobalMaterialLocalizations.delegates,
             supportedLocales: const [Locale('ar', 'AE')],
-            home: Application())),
+            home: const Application())),
   ));
 }
 

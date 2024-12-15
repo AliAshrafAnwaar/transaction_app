@@ -79,12 +79,12 @@ class _HomeState extends ConsumerState<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Form(
-          key: _formKey, // Wrap the inputs in a Form widget
-          child: Center(
+    return SafeArea(
+      child: Center(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Form(
+            key: _formKey, // Wrap the inputs in a Form widget
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 700),
               child: Column(

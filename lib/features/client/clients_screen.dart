@@ -67,7 +67,7 @@ class _ClientsScreenState extends ConsumerState<ClientsScreen> {
     return SafeArea(
       child: LayoutBuilder(
         builder: (context, constraints) {
-          bool isWeb = constraints.maxWidth >= 1200;
+          bool isWeb = constraints.maxWidth > 1024;
 
           if (isWeb) {
             return Padding(

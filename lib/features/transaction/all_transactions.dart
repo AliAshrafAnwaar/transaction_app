@@ -87,24 +87,25 @@ class _AllTransactionsState extends ConsumerState<AllTransactions> {
     }
 
     return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            LayoutBuilder(
-              builder: (context, constraints) {
-                bool isWeb = constraints.maxWidth > 1200;
-                if (isWeb) {
-                  return SizedBox();
-                } else {
-                  return _buildSearchAndSortBar();
-                }
-              },
-            ),
-            const SizedBox(height: 10),
-            _buildTransactionList(),
-          ],
-        ),
+      child: Column(
+        children: [
+          LayoutBuilder(
+            builder: (context, constraints) {
+              bool isWeb = constraints.maxWidth > 1024;
+
+              if (isWeb) {
+                return const SizedBox();
+              } else {
+                return Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: _buildSearchAndSortBar(),
+                );
+              }
+            },
+          ),
+          const SizedBox(height: 10),
+          _buildTransactionList(),
+        ],
       ),
     );
   }
@@ -159,12 +160,15 @@ class _AllTransactionsState extends ConsumerState<AllTransactions> {
 
   Widget _buildTransactionList() {
     return Expanded(
-      child: ListView.builder(
-        itemCount: filteredTransactions.length,
-        itemBuilder: (context, index) {
-          final transaction = filteredTransactions[index];
-          return _buildTransactionCard(transaction);
-        },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: ListView.builder(
+          itemCount: filteredTransactions.length,
+          itemBuilder: (context, index) {
+            final transaction = filteredTransactions[index];
+            return _buildTransactionCard(transaction);
+          },
+        ),
       ),
     );
   }
