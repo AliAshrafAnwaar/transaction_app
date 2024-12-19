@@ -180,12 +180,17 @@ class _AllTransactionsState extends ConsumerState<AllTransactions> {
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: ListView.builder(
-          itemCount: filteredTransactions.length,
-          itemBuilder: (context, index) {
-            final transaction = filteredTransactions[index];
-            return _buildTransactionCard(transaction);
-          },
+        child: RefreshIndicator(
+          onRefresh: ref
+              .read(allTransactionsProviderProvider.notifier)
+              .loadTransactions,
+          child: ListView.builder(
+            itemCount: filteredTransactions.length,
+            itemBuilder: (context, index) {
+              final transaction = filteredTransactions[index];
+              return _buildTransactionCard(transaction);
+            },
+          ),
         ),
       ),
     );

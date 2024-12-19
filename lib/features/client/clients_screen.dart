@@ -99,16 +99,12 @@ class _ClientsScreenState extends ConsumerState<ClientsScreen> {
                     } else {
                       return Column(
                         children: [
-                          Container(
-                            color: Colors.blue,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: StyledTextField(
-                                hint: 'البحث عن',
-                                isWhite: true,
-                                icon: Icons.person,
-                                controller: searchController,
-                              ),
+                          Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: StyledTextField(
+                              hint: 'البحث عن',
+                              icon: Icons.person,
+                              controller: searchController,
                             ),
                           ),
                           _buildClientList(filteredClients),
@@ -147,12 +143,15 @@ class _ClientsScreenState extends ConsumerState<ClientsScreen> {
     }
 
     return Expanded(
-      child: ListView.builder(
-        itemCount: filteredClients.length,
-        itemBuilder: (context, index) {
-          final client = filteredClients[index];
-          return _buildClientTile(client);
-        },
+      child: RefreshIndicator(
+        onRefresh: ref.read(clientProviderProvider.notifier).loadClients,
+        child: ListView.builder(
+          itemCount: filteredClients.length,
+          itemBuilder: (context, index) {
+            final client = filteredClients[index];
+            return _buildClientTile(client);
+          },
+        ),
       ),
     );
   }

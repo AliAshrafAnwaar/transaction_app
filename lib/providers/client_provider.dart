@@ -48,6 +48,7 @@ class ClientProvider extends _$ClientProvider {
   void deleteClient(Client client) async {
     _firestoreRepoIns.deleteClient(client.phoneNumber!).then((e) {
       state.remove(client);
+      loadClients();
     });
   }
 

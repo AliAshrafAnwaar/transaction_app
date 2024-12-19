@@ -7,6 +7,8 @@ import 'package:transaction_app/providers/client_provider.dart';
 import 'package:transaction_app/providers/excel_provider.dart';
 
 class AdminPage extends ConsumerStatefulWidget {
+  const AdminPage({super.key});
+
   @override
   ConsumerState<AdminPage> createState() => _AdminPageState();
 }
@@ -44,12 +46,17 @@ class _AdminPageState extends ConsumerState<AdminPage> {
     final excelNotifier = ref.read(excelProviderProvider.notifier);
     final clientProvider = ref.watch(clientProviderProvider);
 
+    if (clientProvider.isEmpty) {
+      ref.read(clientProviderProvider.notifier).loadClients();
+    }
+
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Center(
-          child: SingleChildScrollView(
-            child: LayoutBuilder(
+        child: RefreshIndicator(
+          onRefresh: ref.read(clientProviderProvider.notifier).loadClients,
+          child: ListView(children: [
+            LayoutBuilder(
               builder: (context, constraints) {
                 final screenWidth = MediaQuery.of(context).size.width;
                 bool isBig = screenWidth > 800;
@@ -59,7 +66,7 @@ class _AdminPageState extends ConsumerState<AdminPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       ConstrainedBox(
-                        constraints: BoxConstraints(maxWidth: 300),
+                        constraints: const BoxConstraints(maxWidth: 300),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -72,19 +79,19 @@ class _AdminPageState extends ConsumerState<AdminPage> {
                               text: 'اخراج البيانات بصيغه اكسيل',
                               icon: Icons.share_outlined,
                             ),
-                            Separator(),
+                            const Separator(),
                             StlyledTextIconButton(
                               onpressed: () {},
                               text: 'الاعدادات',
                               icon: Icons.settings,
                             ),
-                            Separator(),
+                            const Separator(),
                             StlyledTextIconButton(
                               onpressed: () {},
                               text: 'تغيير رقم الحمايه',
                               icon: Icons.password,
                             ),
-                            Separator(),
+                            const Separator(),
                             StlyledTextIconButton(
                               onpressed: () {
                                 _showMyDialog();
@@ -92,7 +99,7 @@ class _AdminPageState extends ConsumerState<AdminPage> {
                               text: 'عن التطبيق',
                               icon: Icons.info_outline,
                             ),
-                            Separator(),
+                            const Separator(),
                             StlyledTextIconButton(
                               onpressed: () {},
                               text: 'ابدأ اليوم',
@@ -105,7 +112,7 @@ class _AdminPageState extends ConsumerState<AdminPage> {
                         width: 1, // Width of the separator
                         height: 300,
                         color: Colors.grey, // Color of the separator
-                        margin: EdgeInsets.symmetric(vertical: 10),
+                        margin: const EdgeInsets.symmetric(vertical: 10),
                       ),
 
                       // Additional settings or widgets can be added here
@@ -116,7 +123,7 @@ class _AdminPageState extends ConsumerState<AdminPage> {
                         ),
                         child: const Chart(),
                       ),
-                      SizedBox(),
+                      const SizedBox(),
                     ],
                   );
                 } else {
@@ -173,7 +180,7 @@ class _AdminPageState extends ConsumerState<AdminPage> {
                 }
               },
             ),
-          ),
+          ]),
         ),
       ),
     );

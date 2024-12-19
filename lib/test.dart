@@ -4,65 +4,43 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      home: DragToSyncPage(),
     );
   }
 }
 
-class HomePage extends StatelessWidget {
+class DragToSyncPage extends StatefulWidget {
+  @override
+  _DragToSyncPageState createState() => _DragToSyncPageState();
+}
+
+class _DragToSyncPageState extends State<DragToSyncPage> {
+  final List<String> _items = List.generate(20, (index) => 'Item $index');
+
+  Future<void> _refreshData() async {
+    // Simulate a network request or data reload
+    await Future.delayed(Duration(seconds: 2));
+    setState(() {
+      _items.insert(0, 'New Item ${_items.length + 1}');
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            // Logo or App Name
-            Text(
-              'MyApp',
-              style: TextStyle(color: Colors.white),
-            ),
-
-            // Navigation Links
-            Row(
-              children: [
-                TextButton(
-                  onPressed: () {}, // Navigate to Home
-                  child: Text(
-                    'Home',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-                TextButton(
-                  onPressed: () {}, // Navigate to Features
-                  child: Text(
-                    'Features',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-                TextButton(
-                  onPressed: () {}, // Navigate to About
-                  child: Text(
-                    'About',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-                TextButton(
-                  onPressed: () {}, // Navigate to Contact
-                  child: Text(
-                    'Contact',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-        backgroundColor: Colors.blue,
+        title: Text('Drag to Sync Example'),
       ),
-      body: Center(
-        child: Text('Welcome to MyApp!'),
+      body: RefreshIndicator(
+        onRefresh: _refreshData,
+        child: ListView.builder(
+          itemCount: _items.length,
+          itemBuilder: (context, index) {
+            return ListTile(
+              title: Text(_items[index]),
+            );
+          },
+        ),
       ),
     );
   }
