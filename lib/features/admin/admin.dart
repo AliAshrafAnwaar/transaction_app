@@ -53,134 +53,142 @@ class _AdminPageState extends ConsumerState<AdminPage> {
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: RefreshIndicator(
-          onRefresh: ref.read(clientProviderProvider.notifier).loadClients,
-          child: ListView(children: [
-            LayoutBuilder(
-              builder: (context, constraints) {
-                final screenWidth = MediaQuery.of(context).size.width;
-                bool isBig = screenWidth > 800;
-                if (isBig) {
-                  return Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ConstrainedBox(
-                        constraints: const BoxConstraints(maxWidth: 300),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            StlyledTextIconButton(
-                              onpressed: () {
-                                excelNotifier
-                                    .exportClientsToExcel(clientProvider);
-                              },
-                              text: 'اخراج البيانات بصيغه اكسيل',
-                              icon: Icons.share_outlined,
-                            ),
-                            const Separator(),
-                            StlyledTextIconButton(
-                              onpressed: () {},
-                              text: 'الاعدادات',
-                              icon: Icons.settings,
-                            ),
-                            const Separator(),
-                            StlyledTextIconButton(
-                              onpressed: () {},
-                              text: 'تغيير رقم الحمايه',
-                              icon: Icons.password,
-                            ),
-                            const Separator(),
-                            StlyledTextIconButton(
-                              onpressed: () {
-                                _showMyDialog();
-                              },
-                              text: 'عن التطبيق',
-                              icon: Icons.info_outline,
-                            ),
-                            const Separator(),
-                            StlyledTextIconButton(
-                              onpressed: () {},
-                              text: 'ابدأ اليوم',
-                              icon: Icons.alarm_on,
-                            ),
-                          ],
-                        ),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final screenWidth = MediaQuery.of(context).size.width;
+            bool isBig = screenWidth > 800;
+            if (isBig) {
+              return Center(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 300),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          StlyledTextIconButton(
+                            onpressed: () {
+                              excelNotifier
+                                  .exportClientsToExcel(clientProvider);
+                            },
+                            text: 'اخراج البيانات بصيغه اكسيل',
+                            icon: Icons.share_outlined,
+                          ),
+                          const Separator(),
+                          StlyledTextIconButton(
+                            onpressed: () {},
+                            text: 'الاعدادات',
+                            icon: Icons.settings,
+                          ),
+                          const Separator(),
+                          StlyledTextIconButton(
+                            onpressed: () {},
+                            text: 'تغيير رقم الحمايه',
+                            icon: Icons.password,
+                          ),
+                          const Separator(),
+                          StlyledTextIconButton(
+                            onpressed: () {
+                              _showMyDialog();
+                            },
+                            text: 'عن التطبيق',
+                            icon: Icons.info_outline,
+                          ),
+                          // const Separator(),
+                          // StlyledTextIconButton(
+                          //   onpressed: () {},
+                          //   text: 'ابدأ اليوم',
+                          //   icon: Icons.alarm_on,
+                          // ),
+                        ],
                       ),
-                      Container(
-                        width: 1, // Width of the separator
-                        height: 300,
-                        color: Colors.grey, // Color of the separator
-                        margin: const EdgeInsets.symmetric(vertical: 10),
-                      ),
+                    ),
+                    Container(
+                      width: 1, // Width of the separator
+                      height: 300,
+                      color: Colors.grey, // Color of the separator
+                      margin: const EdgeInsets.symmetric(vertical: 10),
+                    ),
 
-                      // Additional settings or widgets can be added here
-                      ConstrainedBox(
-                        constraints: BoxConstraints(
-                          maxWidth: (screenWidth > 450) ? 450 : screenWidth,
-                          maxHeight: screenHeight > 350 ? 350 : screenHeight,
-                        ),
-                        child: const Chart(),
+                    // Additional settings or widgets can be added here
+                    ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxWidth: (screenWidth > 450) ? 450 : screenWidth,
+                        maxHeight: screenHeight > 350 ? 350 : screenHeight,
                       ),
-                      const SizedBox(),
-                    ],
-                  );
-                } else {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      ConstrainedBox(
-                        constraints: BoxConstraints(
-                          maxWidth: (screenWidth > 600) ? 600 : screenWidth,
-                          maxHeight: screenWidth > 400 ? 300 : screenWidth,
-                        ),
-                        child: const Chart(),
+                      child: const Chart(),
+                    ),
+                    const SizedBox(),
+                  ],
+                ),
+              );
+            } else {
+              return RefreshIndicator(
+                onRefresh:
+                    ref.read(clientProviderProvider.notifier).loadClients,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxWidth: (screenWidth > 600) ? 600 : screenWidth,
+                        maxHeight: screenWidth > 400 ? 300 : screenWidth,
                       ),
-                      const SizedBox(height: 20),
-                      const Separator(),
-                      const SizedBox(height: 20),
-                      // Additional settings or widgets can be added here
-                      StlyledTextIconButton(
-                        onpressed: () {
-                          excelNotifier.exportClientsToExcel(clientProvider);
-                        },
-                        text: 'اخراج البيانات بصيغه اكسيل',
-                        icon: Icons.share_outlined,
+                      child: const Chart(),
+                    ),
+                    Flexible(
+                      child: ListView(
+                        children: [
+                          const SizedBox(height: 20),
+                          const Separator(),
+                          const SizedBox(height: 20),
+                          // Additional settings or widgets can be added here
+                          StlyledTextIconButton(
+                            onpressed: () {
+                              excelNotifier
+                                  .exportClientsToExcel(clientProvider);
+                            },
+                            text: 'اخراج البيانات بصيغه اكسيل',
+                            icon: Icons.share_outlined,
+                          ),
+                          const Separator(),
+                          StlyledTextIconButton(
+                            onpressed: () {},
+                            text: 'الاعدادات',
+                            icon: Icons.settings,
+                          ),
+                          const Separator(),
+                          StlyledTextIconButton(
+                            onpressed: () {},
+                            text: 'تغيير رقم الحمايه',
+                            icon: Icons.password,
+                          ),
+                          const Separator(),
+                          StlyledTextIconButton(
+                            onpressed: () {
+                              _showMyDialog();
+                            },
+                            text: 'عن التطبيق',
+                            icon: Icons.info_outline,
+                          ),
+                          const Separator(),
+                          StlyledTextIconButton(
+                            onpressed: () {},
+                            text: 'ابدأ اليوم',
+                            icon: Icons.alarm_on,
+                          ),
+                          const Separator(),
+                        ],
                       ),
-                      const Separator(),
-                      StlyledTextIconButton(
-                        onpressed: () {},
-                        text: 'الاعدادات',
-                        icon: Icons.settings,
-                      ),
-                      const Separator(),
-                      StlyledTextIconButton(
-                        onpressed: () {},
-                        text: 'تغيير رقم الحمايه',
-                        icon: Icons.password,
-                      ),
-                      const Separator(),
-                      StlyledTextIconButton(
-                        onpressed: () {
-                          _showMyDialog();
-                        },
-                        text: 'عن التطبيق',
-                        icon: Icons.info_outline,
-                      ),
-                      const Separator(),
-                      StlyledTextIconButton(
-                        onpressed: () {},
-                        text: 'ابدأ اليوم',
-                        icon: Icons.alarm_on,
-                      ),
-                      const Separator(),
-                    ],
-                  );
-                }
-              },
-            ),
-          ]),
+                    ),
+                  ],
+                ),
+              );
+            }
+          },
         ),
       ),
     );
